@@ -118,14 +118,14 @@ file(
 
 #Déclaration de l'exécutable
 add_executable(
-	modele-ogre3d
+	sleepyOgre3D
 	${source_files}
 )
 
 #Configuration de l'édition de liens
 if(WIN32)
 	target_link_libraries(
-		modele-ogre3d
+		sleepyOgre3D
 		${OIS_LIBRARIES}
 		${OGRE_LIBRARIES}
 		${Boost_THREAD_LIBRARY}
@@ -135,7 +135,7 @@ if(WIN32)
 	)
 ELSE()
 	target_link_libraries(
-		modele-ogre3d
+		sleepyOgre3D
 		${OIS_LIBRARIES}
 		${OGRE_LIBRARIES}
 		${CEGUI_LIBRARIES}
