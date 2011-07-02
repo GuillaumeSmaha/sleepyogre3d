@@ -1,0 +1,9 @@
+/build/*
+compileDebug.sh
+init_cmake.sh
+CMakeCache.txt
+Ogre.log
+ogre.cfg
+plugins.cfg
+resources.cfg
+*~
