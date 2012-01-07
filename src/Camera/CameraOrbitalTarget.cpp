@@ -13,6 +13,10 @@ CameraOrbitalTarget::CameraOrbitalTarget(Ogre::String cameraName, Ogre::SceneNod
     this->targetNode = targetNode->createChildSceneNode("nodeOrbitalTargetCamera_"+cameraName+"_"+Utils::toString(Utils::unique()));
     this->targetNode->setPosition(0.0, 0.0, 0.0);
     this->targetPosition = targetNode->_getDerivedPosition();
+    
+	this->targetEntity = GestSceneManager::getSingletonPtr()->createEntity("Sphere"+Utils::toString(Utils::unique()), "Sphere.mesh");
+	this->targetEntity->setMaterialName("SphereGreen");
+	this->targetNode->attachObject(this->targetEntity);
 }
 
 
@@ -51,30 +55,33 @@ void CameraOrbitalTarget::updateCamera(void * null)
 	
 	if(dist > 1.0)
 	{
-		vec.normalise();
+		//~ vec.normalise();
 		this->moveCameraOrbitalTarget(vec);
 	}
 }
 
-
 void CameraOrbitalTarget::applyTranslateBeforce()
 {
-	this->targetPosition += Ogre::Vector3(this->getTranslateStep(), 0.0, 0.0);
+	//~ this->targetPosition += Odgre::Vector3(this->getTranslateStep(), 0.0, 0.0);
+	this->targetNode->setPosition(this->targetNode->getPosition() + Ogre::Vector3(this->getTranslateStep(), 0.0, 0.0));
 }
 
 void CameraOrbitalTarget::applyTranslateBehind()
 {
-	this->targetPosition += Ogre::Vector3(-this->getTranslateStep(), 0.0, 0.0);
+	//~ this->targetPosition += Ogre::Vector3(-this->getTranslateStep(), 0.0, 0.0);
+	this->targetNode->setPosition(this->targetNode->getPosition() + Ogre::Vector3(-this->getTranslateStep(), 0.0, 0.0));
 }
 
 void CameraOrbitalTarget::applyTranslateLeft()
 {
-	this->targetPosition += Ogre::Vector3(0.0, -this->getTranslateStep(), 0.0);
+	//~ this->targetPosition += Ogre::Vector3(0.0, -this->getTranslateStep(), 0.0);
+	this->targetNode->setPosition(this->targetNode->getPosition() + Ogre::Vector3(0.0, -this->getTranslateStep(), 0.0));
 }
 
 void CameraOrbitalTarget::applyTranslateRight()
 {
-	this->targetPosition += Ogre::Vector3(0.0, this->getTranslateStep(), 0.0);
+	//~ this->targetPosition += Ogre::Vector3(0.0, this->getTranslateStep(), 0.0);
+	this->targetNode->setPosition(this->targetNode->getPosition() + Ogre::Vector3(0.0, -this->getTranslateStep(), 0.0));
 }
 
 void CameraOrbitalTarget::applyTranslateUp()

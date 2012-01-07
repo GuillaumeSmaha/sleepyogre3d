@@ -8,6 +8,10 @@ CameraOrbital::CameraOrbital(Ogre::String cameraName, Ogre::Vector3 position) : 
     this->targetNode = GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA)->createChildSceneNode("nodeOrbitalCamera_"+cameraName+"_"+Utils::toString(Utils::unique()));
     this->targetNode->_setDerivedPosition(position);
     this->targetPosition = position;
+    
+	this->targetEntity = GestSceneManager::getSingletonPtr()->createEntity("Sphere"+Utils::toString(Utils::unique()), "Sphere.mesh");
+	this->targetEntity->setMaterialName("SphereRed");
+	this->targetNode->attachObject(this->targetEntity);
 }
 
 CameraOrbital::CameraOrbital(Ogre::String cameraName, Ogre::SceneNode * targetNode) : CameraAbstract(cameraName)
@@ -22,6 +26,11 @@ CameraOrbital::CameraOrbital(Ogre::String cameraName, Ogre::SceneNode * targetNo
     this->targetNode = GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA)->createChildSceneNode("nodeOrbitalCamera_"+cameraName+"_"+Utils::toString(Utils::unique()));
     this->targetNode->_setDerivedPosition(targetNode->_getDerivedPosition());
     this->targetPosition = targetNode->_getDerivedPosition();
+    
+    
+	this->targetEntity = GestSceneManager::getSingletonPtr()->createEntity("Sphere"+Utils::toString(Utils::unique()), "Sphere.mesh");
+	this->targetEntity->setMaterialName("SphereRed");
+	this->targetNode->attachObject(this->targetEntity);
 }
 
 

@@ -11,6 +11,10 @@ CameraTarget::CameraTarget(Ogre::String cameraName, Ogre::SceneNode * targetNode
 	}
     this->targetNode = targetNode;
     this->targetPosition = targetNode->_getDerivedPosition();
+    
+	this->targetEntity = GestSceneManager::getSingletonPtr()->createEntity("Sphere"+Utils::toString(Utils::unique()), "Sphere.mesh");
+	this->targetEntity->setMaterialName("SphereBlue");
+	this->targetNode->attachObject(this->targetEntity);
 }
 
 
@@ -48,7 +52,7 @@ void CameraTarget::updateCamera(void * null)
 	
 	if(dist > 1.0)
 	{
-		vec.normalise();
+		//~ vec.normalise();
 		this->moveCameraTarget(vec);
 	}
 }
@@ -56,22 +60,26 @@ void CameraTarget::updateCamera(void * null)
 
 void CameraTarget::applyTranslateBeforce()
 {
-	this->targetPosition += Ogre::Vector3(this->getTranslateStep(), 0.0, 0.0);
+	//~ this->targetPosition += Odgre::Vector3(this->getTranslateStep(), 0.0, 0.0);
+	this->targetNode->setPosition(this->targetNode->getPosition() + Ogre::Vector3(this->getTranslateStep(), 0.0, 0.0));
 }
 
 void CameraTarget::applyTranslateBehind()
 {
-	this->targetPosition += Ogre::Vector3(-this->getTranslateStep(), 0.0, 0.0);
+	//~ this->targetPosition += Ogre::Vector3(-this->getTranslateStep(), 0.0, 0.0);
+	this->targetNode->setPosition(this->targetNode->getPosition() + Ogre::Vector3(-this->getTranslateStep(), 0.0, 0.0));
 }
 
 void CameraTarget::applyTranslateLeft()
 {
-	this->targetPosition += Ogre::Vector3(0.0, -this->getTranslateStep(), 0.0);
+	//~ this->targetPosition += Ogre::Vector3(0.0, -this->getTranslateStep(), 0.0);
+	this->targetNode->setPosition(this->targetNode->getPosition() + Ogre::Vector3(0.0, -this->getTranslateStep(), 0.0));
 }
 
 void CameraTarget::applyTranslateRight()
 {
-	this->targetPosition += Ogre::Vector3(0.0, this->getTranslateStep(), 0.0);
+	//~ this->targetPosition += Ogre::Vector3(0.0, this->getTranslateStep(), 0.0);
+	this->targetNode->setPosition(this->targetNode->getPosition() + Ogre::Vector3(0.0, -this->getTranslateStep(), 0.0));
 }
 
 void CameraTarget::applyTranslateUp()

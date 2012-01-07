@@ -1,4 +1,7 @@
 #include "Scene/InitScene.h"
+#include "Camera/GestCamera.h"
+#include "Camera/CameraAbstract.h"
+#include "Viewport/GestViewport.h"
 
 void InitScene::init()
 {
@@ -10,10 +13,16 @@ void InitScene::init()
 	nodeLight1->attachObject(l);		
 	
 	
-	Ogre::Entity * ogreHead = GestSceneManager::getSingletonPtr()->createEntity("Ogre", "Ogre.mesh");
-	//~ ogreHead->setMaterialName("Ogre");
 	Ogre::SceneNode * ogreHeadNode = GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_OBJECT)->createChildSceneNode("OgreNode");
+	Ogre::Entity * ogreHead = GestSceneManager::getSingletonPtr()->createEntity("Ogre", "Ogre.mesh");
 	ogreHeadNode->attachObject(ogreHead);
+	
+    
+    CameraAbstract * camera = GestCamera::getSingletonPtr()->addCamera(CameraAbstract::CAMERA_TARGET, "mainCam", ogreHeadNode);
+    CameraAbstract * camera4 = GestCamera::getSingletonPtr()->addCamera(CameraAbstract::CAMERA_ORBITAL_TARGET, "mainCam4", ogreHeadNode);
+    
+	GestViewport::getSingletonPtr()->addViewport(camera);
+	GestViewport::getSingletonPtr()->addViewport(camera4);
 }
 
 void InitScene::destroy()

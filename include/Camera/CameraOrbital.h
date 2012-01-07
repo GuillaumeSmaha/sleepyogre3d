@@ -45,6 +45,7 @@ class CameraOrbital : public CameraAbstract
 {
 
     private:
+		Ogre::Entity * targetEntity;
 		/*!
 		 * \brief Cible de la caméra
 		 */
