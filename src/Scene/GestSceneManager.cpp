@@ -1,27 +1,27 @@
 #include "Scene/GestSceneManager.h"
 
-template<> GestSceneManager * ClassRootSingleton<GestSceneManager>::_instance = NULL;
+template<> GestSceneManager * ClassRootSingleton<GestSceneManager>::_instance = 0;
 
 
 Ogre::SceneManager * GestSceneManager::getSceneManager()
 {
-	if(GestSceneManager::getSingletonPtr() != NULL)
+	if(GestSceneManager::getSingletonPtr() != 0)
 		return GestSceneManager::getSingletonPtr()->sceneManager;
 		
-	return NULL;
+	return 0;
 }
 
 Ogre::Root * GestSceneManager::getRoot()
 {
-	if(GestSceneManager::getSingletonPtr() != NULL)
+	if(GestSceneManager::getSingletonPtr() != 0)
 		return GestSceneManager::getSingletonPtr()->root;
 		
-	return NULL;
+	return 0;
 }
 
 GestSceneManager::GestSceneManager() : ClassRootSingleton<GestSceneManager>()
 {
-	this->sceneManager = NULL;
+	this->sceneManager = 0;
 	
 	// construct Ogre::Root
 	#ifdef _DEBUG
@@ -39,7 +39,7 @@ GestSceneManager::GestSceneManager() : ClassRootSingleton<GestSceneManager>()
 
 GestSceneManager::~GestSceneManager()
 {
-	if(this->sceneManager != NULL)
+	if(this->sceneManager != 0)
 	{
 		this->sceneManager->clearScene();
 		this->root->destroySceneManager(this->sceneManager);

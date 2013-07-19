@@ -1,10 +1,10 @@
 #include "Listener/ListenerKeyboard.h"
 
-template<> ListenerKeyboard * ClassRootSingleton<ListenerKeyboard>::_instance = NULL;
+template<> ListenerKeyboard * ClassRootSingleton<ListenerKeyboard>::_instance = 0;
 
 void ListenerKeyboard::createSingleton()
 {
-	if(ListenerInputManager::getSingletonPtr()->getInputManager() != NULL)
+	if(ListenerInputManager::getSingletonPtr()->getInputManager() != 0)
 	{
 		new ListenerKeyboard();
 	}
@@ -31,13 +31,13 @@ ListenerKeyboard::~ListenerKeyboard()
 
 void ListenerKeyboard::capture()
 {
-    this->capture(NULL);
+    this->capture(0);
 }
 
 void ListenerKeyboard::capture(void *)
 {
     this->keyboard->capture();
-    this->keyStillPressed(NULL);
+    this->keyStillPressed(0);
 }
 
 bool ListenerKeyboard::keyStillPressed(void *)

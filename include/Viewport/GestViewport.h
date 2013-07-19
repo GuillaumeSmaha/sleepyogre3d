@@ -130,7 +130,7 @@ class GestViewport : public ClassRootSingleton<GestViewport>
 		/*!
 		 * \brief Return the viewport with the viewport id
 		 * \param viewportId Viewport id
-		 * \return A pointer on the object or NULL
+		 * \return A pointer on the object or 0
 		 */
 		Viewport * find(int viewportId);
 		/*!

@@ -4,9 +4,9 @@ CameraTarget::CameraTarget(Ogre::String cameraName, Ogre::SceneNode * targetNode
 {
 	this->cameraType = CameraAbstract::CAMERA_TARGET;
 	
-	if(targetNode == NULL)
+	if(targetNode == 0)
 	{
-		std::cerr << std::endl << "CameraTarget::CameraTarget : targetNode is NULL !" << std::endl << std::endl;
+		std::cerr << std::endl << "CameraTarget::CameraTarget : targetNode is 0 !" << std::endl << std::endl;
 		return;
 	}
     this->targetNode = targetNode;

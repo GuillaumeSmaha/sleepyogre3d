@@ -1,6 +1,6 @@
 #include "GestInteraction.h"
 
-template<> GestInteraction * ClassRootSingleton<GestInteraction>::_instance = NULL;
+template<> GestInteraction * ClassRootSingleton<GestInteraction>::_instance = 0;
 
 
 GestInteraction::GestInteraction() : ClassRootSingleton<GestInteraction>()

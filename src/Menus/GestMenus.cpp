@@ -1,11 +1,11 @@
 #include "Menus/GestMenus.h"
 
 
-template<> GestMenus * ClassRootSingleton<GestMenus>::_instance = NULL;
+template<> GestMenus * ClassRootSingleton<GestMenus>::_instance = 0;
 
 GestMenus::GestMenus() : ClassRootSingleton<GestMenus>()
 {
-    this->rootWindow = NULL;
+    this->rootWindow = 0;
     
    //démarre le menusRenderer
 	this->menusRenderer = &CEGUI::OgreRenderer::bootstrapSystem();

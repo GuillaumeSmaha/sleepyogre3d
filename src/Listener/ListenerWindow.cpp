@@ -1,6 +1,6 @@
 #include "Listener/ListenerWindow.h"
 
-template<> ListenerWindow * ClassRootSingleton<ListenerWindow>::_instance = NULL;
+template<> ListenerWindow * ClassRootSingleton<ListenerWindow>::_instance = 0;
 
 void ListenerWindow::createSingleton()
 {

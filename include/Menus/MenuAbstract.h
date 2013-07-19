@@ -100,7 +100,7 @@ class MenuAbstract : public ClassRoot
 	
         /*!
         * \brief Generate the content of the menu.
-        * The last element of the array must be NULL !
+        * The last element of the array must be 0 !
         * \return Define the content of the menu
         */
         virtual CEGUI::Window ** generateContent() = 0;

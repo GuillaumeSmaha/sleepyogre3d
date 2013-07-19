@@ -1,6 +1,6 @@
 #include "Camera/GestCamera.h"
 
-template<> GestCamera * ClassRootSingleton<GestCamera>::_instance = NULL;
+template<> GestCamera * ClassRootSingleton<GestCamera>::_instance = 0;
 
 GestCamera::GestCamera() : ClassRootSingleton<GestCamera>()
 {
@@ -19,7 +19,7 @@ void GestCamera::addCamera(CameraAbstract * camera)
 
 CameraAbstract * GestCamera::addCamera(CameraAbstract::CameraType cameraType, Ogre::String cameraName, void * param1)
 {
-	CameraAbstract * cam = NULL;
+	CameraAbstract * cam = 0;
 	switch(cameraType)
 	{
 		case CameraAbstract::CAMERA_FREE :
@@ -85,7 +85,7 @@ CameraAbstract * GestCamera::getCamera(unsigned int id)
 {
     if(id >= this->listCameras.size())
     {
-        return NULL;
+        return 0;
     }
     return this->listCameras.at(id);
 }

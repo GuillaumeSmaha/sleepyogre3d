@@ -18,9 +18,9 @@ CameraOrbital::CameraOrbital(Ogre::String cameraName, Ogre::SceneNode * targetNo
 {
 	this->cameraType = CameraAbstract::CAMERA_ORBITAL;
 	
-	if(targetNode == NULL)
+	if(targetNode == 0)
 	{
-		std::cerr << std::endl << "CameraOrbital::CameraOrbital : targetNode is NULL !" << std::endl << std::endl;
+		std::cerr << std::endl << "CameraOrbital::CameraOrbital : targetNode is 0 !" << std::endl << std::endl;
 		return;
 	}
     this->targetNode = GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA)->createChildSceneNode("nodeOrbitalCamera_"+cameraName+"_"+Utils::toString(Utils::unique()));

@@ -6,7 +6,7 @@ using namespace CEGUI;
 MenuAbstract::MenuAbstract(CEGUI::String name)
 {
 	this->name = name;
-	this->window = NULL;
+	this->window = 0;
 	this->isOpen = false;
 	this->buttonCloseShow = true;
 }
@@ -34,7 +34,7 @@ void MenuAbstract::initMenu(float posX, float posY, float width, float height)
 
 void MenuAbstract::windowShow()
 {
-	if(this->window != NULL)
+	if(this->window != 0)
 	{
 		CEGUI::System::getSingleton().setGUISheet(this->window);
 
@@ -45,7 +45,7 @@ void MenuAbstract::windowShow()
 
 void MenuAbstract::windowHide()
 {
-	if(this->window != NULL)
+	if(this->window != 0)
 	{
 		this->window->hide();
 		this->isOpen = false;
@@ -54,7 +54,7 @@ void MenuAbstract::windowHide()
 
 void MenuAbstract::windowSwitch()
 {
-	if(this->window != NULL)
+	if(this->window != 0)
 	{
 		if(this->isOpen)
 			this->windowHide();
@@ -89,10 +89,10 @@ void MenuAbstract::windowCreateBase(float posX, float posY, float width, float h
     menuBackground->setSize(CEGUI::UVector2(CEGUI::UDim(width, 0.0f), CEGUI::UDim(height, 0.0f)));
     menuBackground->setPosition(CEGUI::UVector2(CEGUI::UDim(posX, 0.0f),CEGUI::UDim((posY+0.05f), 0.0f)));
 
-    if(content[0] != NULL)
+    if(content[0] != 0)
     {
 		int i = 0;
-		while(content[i] != NULL)
+		while(content[i] != 0)
 		{
 			CEGUI::Window * tmp_content = content[i];
 			menuBackground->addChildWindow(tmp_content);

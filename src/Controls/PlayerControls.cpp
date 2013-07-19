@@ -1,6 +1,6 @@
 #include "Controls/PlayerControls.h"
 
-template<> PlayerControls * ClassRootSingleton<PlayerControls>::_instance = NULL;
+template<> PlayerControls * ClassRootSingleton<PlayerControls>::_instance = 0;
 
 PlayerControls::PlayerControls() : ClassRootSingleton<PlayerControls>()
 { 

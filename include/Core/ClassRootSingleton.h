@@ -66,7 +66,7 @@ class ClassRootSingleton : public ClassRoot
 		*/
         ClassRootSingleton() : ClassRoot()
         {			
-			if(_instance == NULL)
+			if(_instance == 0)
 			{
 				_instance = static_cast<T *>(this);
 			}
@@ -76,7 +76,7 @@ class ClassRootSingleton : public ClassRoot
          */
         ~ClassRootSingleton()
         {
-			_instance = NULL;
+			_instance = 0;
 		}
         
 		/*!
@@ -84,7 +84,7 @@ class ClassRootSingleton : public ClassRoot
 		 */		
 		static void createSingleton()
 		{
-			if (_instance == NULL)
+			if (_instance == 0)
 			{
 				new T();
 			}
@@ -96,7 +96,7 @@ class ClassRootSingleton : public ClassRoot
 		 */
 		static T * getSingletonPtr()
 		{
-			if (_instance == NULL)
+			if (_instance == 0)
 			{
 				T::createSingleton();
 			}
@@ -108,7 +108,7 @@ class ClassRootSingleton : public ClassRoot
 		 */		
 		static T & getSingleton()
 		{
-			if (_instance == NULL)
+			if (_instance == 0)
 			{
 				T::createSingleton();
 			}
@@ -120,7 +120,7 @@ class ClassRootSingleton : public ClassRoot
 		 */		
 		static void destroySingleton()
 		{
-			if(_instance != NULL)
+			if(_instance != 0)
 			{
 				delete _instance;
 			}

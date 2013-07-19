@@ -13,7 +13,7 @@ void InitCamera::init()
     //~ CameraAbstract * camera4 = GestCamera::getSingletonPtr()->addCamera(CameraAbstract::CAMERA_ORBITAL_TARGET, "mainCam4", GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA_TARGET));
    
 		
-	if(GestViewport::getSingletonPtr() != NULL)
+	if(GestViewport::getSingletonPtr() != 0)
 	{
 		GestViewport::getSingletonPtr()->addViewport(camera2);
 		GestViewport::getSingletonPtr()->addViewport(camera3);

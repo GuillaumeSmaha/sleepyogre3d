@@ -26,7 +26,7 @@ CEGUI::Window ** MenuMain::generateContent()
     CEGUI::Window ** tblWin = new CEGUI::Window *[3];
     tblWin[0] = continueWdw;
     tblWin[1] = quitWdw;
-    tblWin[2] = NULL;
+    tblWin[2] = 0;
     
     return tblWin;
 }

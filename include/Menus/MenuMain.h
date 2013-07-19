@@ -48,7 +48,7 @@ class MenuMain : public MenuAbstract
 		
         /*!
         * \brief Generate the content of the menu.
-        * The last element of the array must be NULL !
+        * The last element of the array must be 0 !
         * \return Define the content of the menu
         */
         CEGUI::Window ** generateContent();

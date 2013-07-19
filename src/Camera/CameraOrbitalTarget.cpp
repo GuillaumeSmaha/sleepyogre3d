@@ -5,9 +5,9 @@ CameraOrbitalTarget::CameraOrbitalTarget(Ogre::String cameraName, Ogre::SceneNod
 {
 	this->cameraType = CameraAbstract::CAMERA_ORBITAL_TARGET;
 	
-	if(targetNode == NULL)
+	if(targetNode == 0)
 	{
-		std::cerr << std::endl << "CameraOrbitalTarget::CameraOrbitalTarget : targetNode is NULL !" << std::endl << std::endl;
+		std::cerr << std::endl << "CameraOrbitalTarget::CameraOrbitalTarget : targetNode is 0 !" << std::endl << std::endl;
 		return;
 	}
     this->targetNode = targetNode->createChildSceneNode("nodeOrbitalTargetCamera_"+cameraName+"_"+Utils::toString(Utils::unique()));

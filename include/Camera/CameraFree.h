@@ -62,7 +62,7 @@ class CameraFree : public CameraAbstract
 		
 		/*!
 		 * \brief Met à jour la position de la caméra
-		 * \param null NULL
+		 * \param null 0
 		 */
 		void updateCamera(void * null);     
         

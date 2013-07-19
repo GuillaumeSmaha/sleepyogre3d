@@ -79,7 +79,7 @@ class GestCamera : public ClassRootSingleton<GestCamera>
 		 * \param param1 Paramètre 1 de la caméra créer
 		 * \return Un pointeur sur la caméra créée
 		 */
-        CameraAbstract * addCamera(CameraAbstract::CameraType cameraType, Ogre::String cameraName, void * param1 = NULL);
+        CameraAbstract * addCamera(CameraAbstract::CameraType cameraType, Ogre::String cameraName, void * param1 = 0);
         /*!
 		 * \brief Supprime la caméra de la liste
 		 * \param cam Camera à supprimer

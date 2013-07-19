@@ -1,6 +1,6 @@
 #include "Tools/StatsOverlay.h"
 
-template<> StatsOverlay * ClassRootSingleton<StatsOverlay>::_instance = NULL;
+template<> StatsOverlay * ClassRootSingleton<StatsOverlay>::_instance = 0;
 
 
 StatsOverlay::StatsOverlay() : ClassRootSingleton<StatsOverlay>()
@@ -56,7 +56,7 @@ void StatsOverlay::updateStats(void *)
 
 void StatsOverlay::drawDebugOverlay()
 {
-	if (debugOverlay != NULL)
+	if (debugOverlay != 0)
 	{
 		this->debugOverlay->show();
 	}
@@ -65,7 +65,7 @@ void StatsOverlay::drawDebugOverlay()
 
 void StatsOverlay::hideDebugOverlay()
 {
-	if (debugOverlay != NULL)
+	if (debugOverlay != 0)
 	{
 		this->debugOverlay->hide();
 	}
@@ -74,7 +74,7 @@ void StatsOverlay::hideDebugOverlay()
 
 void StatsOverlay::showDebugOverlay(bool show)
 {
-	if (debugOverlay != NULL)
+	if (debugOverlay != 0)
 	{
 		if (show)
 			this->debugOverlay->show();

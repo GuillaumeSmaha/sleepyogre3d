@@ -30,6 +30,8 @@ SOFTWARE.
 #ifndef __SIGNAL_H__
 #define __SIGNAL_H__
 
+#include <cstring>
+
 #ifndef DOXYGEN_SKIP
 #include <vector>
 #endif
@@ -88,7 +90,7 @@ class Signal : public ClassRoot
 		*/
         void dispatch(void)
         {
-            this->dispatch(NULL);
+            this->dispatch(0);
         }
 
         /*!

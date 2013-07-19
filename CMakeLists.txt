@@ -44,8 +44,8 @@ FIND_PACKAGE( OGRE REQUIRED )
 FIND_PACKAGE( CEGUI REQUIRED )
 
  
-IF (NOT "${OGRE_VERSION_NAME}" STREQUAL "Cthugha")
-	MESSAGE(SEND_ERROR "You need Ogre 1.7 Cthugha to build this.")
+IF (NOT "${OGRE_VERSION_NAME}" STREQUAL "Byatis")
+	MESSAGE(SEND_ERROR "You need Ogre 1.8 Byatis to build this.")
 ENDIF()
 
 IF(NOT CEGUI_OgreRenderer_FOUND)

@@ -1,6 +1,6 @@
 #include "Listener/ListenerFrame.h"
 
-template<> ListenerFrame * ClassRootSingleton<ListenerFrame>::_instance = NULL;
+template<> ListenerFrame * ClassRootSingleton<ListenerFrame>::_instance = 0;
 
 
 void ListenerFrame::createSingleton()
@@ -54,7 +54,7 @@ bool ListenerFrame::frameEnded(const Ogre::FrameEvent &evt)
 
 void ListenerFrame::shutdown()
 {
-    this->shutdown(NULL);
+    this->shutdown(0);
 
 }
 

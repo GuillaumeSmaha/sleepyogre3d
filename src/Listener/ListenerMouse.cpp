@@ -1,10 +1,10 @@
 #include "Listener/ListenerMouse.h"
 
-template<> ListenerMouse * ClassRootSingleton<ListenerMouse>::_instance = NULL;
+template<> ListenerMouse * ClassRootSingleton<ListenerMouse>::_instance = 0;
 
 void ListenerMouse::createSingleton()
 {
-	if(ListenerInputManager::getSingletonPtr()->getInputManager() != NULL)
+	if(ListenerInputManager::getSingletonPtr()->getInputManager() != 0)
 	{
 		new ListenerMouse();
 	}
@@ -33,7 +33,7 @@ ListenerMouse::~ListenerMouse()
 
 void ListenerMouse::capture()
 {
-    this->capture(NULL);
+    this->capture(0);
 }
 
 void ListenerMouse::capture(void *)

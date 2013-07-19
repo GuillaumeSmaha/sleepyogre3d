@@ -58,7 +58,7 @@ class CameraAbstract : public ClassRoot
 		enum CameraType
 		{
 			/// Caméra Null
-			CAMERA_NULL = 0,
+			CAMERA_0 = 0,
 			/// Caméra libre
 			CAMERA_FREE,
 			/// Caméra orbitale

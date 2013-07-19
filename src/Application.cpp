@@ -1,6 +1,6 @@
 #include "Application.h"
 
-template<> Application * ClassRootSingleton<Application>::_instance = NULL;
+template<> Application * ClassRootSingleton<Application>::_instance = 0;
 
 
 Application::Application() : ClassRootSingleton<Application>()
@@ -49,7 +49,7 @@ bool Application::start()
 
 	// Init the ogre root and scene manager
 	InitSceneGraph::init();
-	if(GestSceneManager::getSceneManager() == NULL)
+	if(GestSceneManager::getSceneManager() == 0)
 		return false;
 
 	// load the ressources

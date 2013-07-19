@@ -1,7 +1,7 @@
 #include "Controls/MouseFunction.h"
 
 
-template<> MouseFunction * ClassRootSingleton<MouseFunction>::_instance = NULL;
+template<> MouseFunction * ClassRootSingleton<MouseFunction>::_instance = 0;
 
 
 CEGUI::MouseButton MouseFunction::convertButton(OIS::MouseButtonID id)

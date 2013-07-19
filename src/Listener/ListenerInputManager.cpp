@@ -1,10 +1,10 @@
 #include "Listener/ListenerInputManager.h"
 
-template<> ListenerInputManager * ClassRootSingleton<ListenerInputManager>::_instance = NULL;
+template<> ListenerInputManager * ClassRootSingleton<ListenerInputManager>::_instance = 0;
 
 void ListenerInputManager::createSingleton()
 {
-	if(ListenerWindow::getSingletonPtr()->getRenderWindow() != NULL)
+	if(ListenerWindow::getSingletonPtr()->getRenderWindow() != 0)
 	{
 		new ListenerInputManager();
 	}

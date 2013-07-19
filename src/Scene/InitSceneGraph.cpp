@@ -4,7 +4,7 @@ void InitSceneGraph::init()
 {
 	GestSceneManager::createSingleton();
 	
-	if(GestSceneManager::getSceneManager() != NULL)
+	if(GestSceneManager::getSceneManager() != 0)
 	{
 		GestSceneManager::getSceneManager()->getRootSceneNode()->createChildSceneNode(NODE_NAME_GROUPE_CAMERA);
 		GestSceneManager::getSceneManager()->getRootSceneNode()->createChildSceneNode(NODE_NAME_GROUPE_CAMERA_TARGET);
@@ -18,7 +18,7 @@ void InitSceneGraph::init()
 
 void InitSceneGraph::destroy()
 {
-	if(GestSceneManager::getSceneManager() != NULL)
+	if(GestSceneManager::getSceneManager() != 0)
 	{
 		GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA)->removeAndDestroyAllChildren();
 		GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA_TARGET)->removeAndDestroyAllChildren();

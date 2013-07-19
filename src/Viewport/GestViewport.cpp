@@ -1,6 +1,6 @@
 #include "Viewport/GestViewport.h"
 
-template<> GestViewport * ClassRootSingleton<GestViewport>::_instance = NULL;
+template<> GestViewport * ClassRootSingleton<GestViewport>::_instance = 0;
 
 
 std::vector<ViewportPosDim_t> GestViewport::getViewportPosDim(int nbViewport)
@@ -77,7 +77,7 @@ int GestViewport::addViewport(CameraAbstract * camera)
 bool GestViewport::changeCameraViewport(int viewportId, CameraAbstract * camera)
 {
 	Viewport * viewport = this->find(viewportId);	
-	if(viewport != NULL)
+	if(viewport != 0)
 	{
 		viewport->setCamera(camera);
 	
@@ -135,7 +135,7 @@ bool GestViewport::isInViewport(int viewportId, Ogre::Vector3 position)
 	if(this->countViewport() > 0)
 	{
 		Viewport * viewport = this->find(viewportId);
-		if(viewport != NULL)
+		if(viewport != 0)
 		{
 			return viewport->isInViewport(position);
 		}
@@ -153,7 +153,7 @@ Viewport * GestViewport::find(int viewportId)
 			return this->lstViewport.at(i);
 	}
 	
-	return NULL;
+	return 0;
 }
 
 

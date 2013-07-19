@@ -27,8 +27,8 @@ Viewport::~Viewport()
 	ListenerWindow * listenerWindow = ListenerWindow::getSingletonPtr();
 	listenerWindow->getRenderWindow()->removeViewport(this->viewport->getZOrder());
 	
-	this->viewport = NULL;
-	this->camera = NULL;
+	this->viewport = 0;
+	this->camera = 0;
 }
 
 
@@ -49,7 +49,7 @@ bool Viewport::isInViewport(Ogre::Vector3 position)
 
 void Viewport::updateViewportSize()
 {
-	if(this->viewport != NULL)
+	if(this->viewport != 0)
 	{
 		Ogre::Real left = this->viewport->getLeft();
 		Ogre::Real top = this->viewport->getTop();
@@ -63,7 +63,7 @@ void Viewport::updateViewportSize()
 
 void Viewport::updateViewportSize(Ogre::Real left, Ogre::Real top, Ogre::Real width, Ogre::Real height)
 {
-	if(this->viewport != NULL)
+	if(this->viewport != 0)
 	{		
 		this->viewport->setDimensions(left, top, width, height);
 		this->camera->getCamera()->setAspectRatio(Ogre::Real(this->viewport->getActualWidth()) / Ogre::Real(this->viewport->getActualHeight()));

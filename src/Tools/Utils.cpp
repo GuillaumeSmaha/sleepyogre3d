@@ -5,7 +5,7 @@ Ogre::String Utils::_logFile = "";
 
 int Utils::initialize(void)
 {
-	srand(time(NULL));
+	srand(time(0));
 	return 0;
 }
 
@@ -130,7 +130,7 @@ Ogre::String Utils::readFile(char * path)
             return res;
     }
     else
-        return NULL;
+        return 0;
 }
 
 
