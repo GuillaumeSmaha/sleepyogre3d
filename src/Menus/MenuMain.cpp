@@ -10,14 +10,14 @@ CEGUI::Window ** MenuMain::generateContent()
 {
     CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 
-    //the add briquette button
-    CEGUI::Window * continueWdw = wmgr.createWindow("SleekSpace/Button", "Briquette/continue"+this->name);
+    //the add MainMenu button
+    CEGUI::Window * continueWdw = wmgr.createWindow("SleekSpace/Button", "MainMenu/continue"+this->name);
     continueWdw->setText("Reprendre");
     continueWdw->setSize(CEGUI::UVector2(CEGUI::UDim( 0.8f, 0.0f ), CEGUI::UDim( 0.10f, 0.0f )));
     continueWdw->setPosition(CEGUI::UVector2( CEGUI::UDim( 0.1f, 0.0f ), CEGUI::UDim( 0.33f, 0.0f )));
-	continueWdw->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&MenuMain::actionButtonContinue, this));
+    continueWdw->subscribeEvent(CEGUI::PushButton::EventClicked, CEGUI::Event::Subscriber(&MenuMain::actionButtonContinue, this));
         
-    CEGUI::Window * quitWdw = wmgr.createWindow("SleekSpace/Button", "Briquette/quit"+this->name);
+    CEGUI::Window * quitWdw = wmgr.createWindow("SleekSpace/Button", "MainMenu/quit"+this->name);
     quitWdw->setText("Quitter");
     quitWdw->setSize(CEGUI::UVector2(CEGUI::UDim( 0.8f, 0.0f ), CEGUI::UDim( 0.10f, 0.0f )));
     quitWdw->setPosition(CEGUI::UVector2( CEGUI::UDim( 0.1f, 0.0f ), CEGUI::UDim( 0.66f, 0.0f )));
@@ -36,16 +36,16 @@ void MenuMain::actionFromUser(Controls::Controls key)
 {
     switch(key)
     {
-        case Controls::OPEN_MENU :
-			if(GestInteraction::getSingletonPtr()->getAppLauched())
-			{
-				this->windowSwitch();
-				GestInteraction::getSingletonPtr()->switchPauseState();
-			}
-            break;
-            
-        default:
-            break;
+      case Controls::OPEN_MENU :
+        if(GestInteraction::getSingletonPtr()->getAppLauched())
+        {
+          this->windowSwitch();
+          GestInteraction::getSingletonPtr()->switchPauseState();
+        }
+        break;
+          
+      default:
+          break;
     }
 }
 
@@ -73,5 +73,5 @@ bool MenuMain::destroyWindow(const CEGUI::EventArgs & evt)
 	CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
 	wmgr.destroyWindow((static_cast<const CEGUI::WindowEventArgs&>(evt)).window->getParent()->getParent()->getParent());
     
-    return true;
+  return true;
 }

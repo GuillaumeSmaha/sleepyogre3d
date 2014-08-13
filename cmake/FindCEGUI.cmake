@@ -1,10 +1,3 @@
-#-------------------------------------------------------------------
-# This file is part of the CMake build system for SleepyOgre3D
-#
-# The contents of this file are placed in the public domain. Feel
-# free to make use of it in any way you like.
-#-------------------------------------------------------------------
-
 # - Locate CEGUI LIBRARIES
 # This module defines
 #  CEGUI_FOUND, if false, do not try to link to CEGUI
@@ -46,10 +39,18 @@ getenv_path(PROGRAMFILES)
 
 # Determine whether to search for a dynamic or static build
 if (CEGUI_STATIC)
-  set(CEGUI_LIB_SUFFIX "_Static")
+  set(CEGUI_LIB_SUFFIX "")
+  set(CMAKE_FIND_LIBRARY_SUFFIXES_OLD "${CMAKE_FIND_LIBRARY_SUFFIXES}")
+  if (WIN32)
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
+  else()
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+  endif()
 else ()
   set(CEGUI_LIB_SUFFIX "")
 endif ()
+
+
 
 set(CEGUI_LIBRARY_NAMES "CEGUIBase${CEGUI_LIB_SUFFIX}")
 get_debug_names(CEGUI_LIBRARY_NAMES)
@@ -87,10 +88,10 @@ create_search_paths(CEGUI)
 
 # redo search if any of the environmental hints changed
 set(CEGUI_WINDOWSRENDERER_COMPONENTS 
-	Falagard
+	CoreWindowRendererSet Falagard
 )
 set(CEGUI_RENDERER_COMPONENTS 
-	Direct3D9Renderer Direct3D10Renderer Direct3D11Renderer IrrlichtRenderer NullRenderer OgreRenderer OpenGLRenderer
+	Direct3D9Renderer Direct3D10Renderer Direct3D11Renderer IrrlichtRenderer NullRenderer OgreRenderer OpenGLRenderer OpenGL3Renderer
 )
 set(CEGUI_IMAGECODEC_COMPONENTS 
 	CoronaImageCodec DevILImageCodec FreeImageImageCodec SILLYImageCodec STBImageCodec TGAImageCodec
@@ -120,24 +121,44 @@ clear_if_changed(CEGUI_PREFIX_WATCH ${CEGUI_RESET_VARS})
 use_pkgconfig(CEGUI_PKGC "CEGUI${CEGUI_LIB_SUFFIX}")
 
 # locate CEGUI include files
-find_path(CEGUI_CONFIG_INCLUDE_DIR NAMES CEGUIConfig.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS})
-find_path(CEGUI_INCLUDE_DIR NAMES CEGUI.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS})
+#find_path(CEGUI_CONFIG_INCLUDE_DIR_OLD NAMES CEGUI/Config.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
+#find_path(CEGUI_CONFIG_INCLUDE_DIR NAMES CEGUI/Config.h CEGUI/CEGUIConfig.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
+#find_path(CEGUI_INCLUDE_DIR NAMES CEGUI/CEGUI.h  HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
+find_path(CEGUI_CONFIG_INCLUDE_DIR_OLD NAMES Config.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
+find_path(CEGUI_CONFIG_INCLUDE_DIR NAMES Config.h CEGUIConfig.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
+find_path(CEGUI_INCLUDE_DIR NAMES CEGUI.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
 set(CEGUI_INCOMPATIBLE FALSE)
+
 
 if (CEGUI_INCLUDE_DIR)
   # determine CEGUI version
-  file(READ ${CEGUI_INCLUDE_DIR}/CEGUIVersion.h CEGUI_TEMP_VERSION_CONTENT)
-  get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_MAJOR CEGUI_VERSION_MAJOR)
-  get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_MINOR CEGUI_VERSION_MINOR)
-  get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_PATCH CEGUI_VERSION_PATCH)
-  get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_NAME CEGUI_VERSION_NAME)
-  set(CEGUI_VERSION "${CEGUI_VERSION_MAJOR}.${CEGUI_VERSION_MINOR}.${CEGUI_VERSION_PATCH}")
-  pkg_message(CEGUI "Found CEGUI ${CEGUI_VERSION_NAME} (${CEGUI_VERSION})")
-
+  IF(CEGUI_CONFIG_INCLUDE_DIR_OLD)
+    file(READ ${CEGUI_INCLUDE_DIR}/Version.h CEGUI_TEMP_VERSION_CONTENT)
+  ELSE()
+    file(READ ${CEGUI_INCLUDE_DIR}/CEGUIVersion.h CEGUI_TEMP_VERSION_CONTENT)
+  ENDIF()
+  
+  IF (NOT "${CEGUI_TEMP_VERSION_CONTENT}" STREQUAL "")
+    get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_MAJOR CEGUI_VERSION_MAJOR)
+    get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_MINOR CEGUI_VERSION_MINOR)
+    get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_PATCH CEGUI_VERSION_PATCH)
+    get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_NAME CEGUI_VERSION_NAME)
+    set(CEGUI_VERSION "${CEGUI_VERSION_MAJOR}.${CEGUI_VERSION_MINOR}.${CEGUI_VERSION_PATCH}")
+    pkg_message(CEGUI "Found CEGUI ${CEGUI_VERSION_NAME} (${CEGUI_VERSION})")
+  ELSE()
+    MESSAGE(SEND_ERROR "Can't found CEGUI version !")
+  ENDIF()
+  
   # determine configuration settings
-  set(CEGUI_CONFIG_HEADERS
-    ${CEGUI_CONFIG_INCLUDE_DIR}/CEGUIConfig.h
-  )
+  IF(CEGUI_CONFIG_INCLUDE_DIR_OLD)
+    set(CEGUI_CONFIG_HEADERS
+      ${CEGUI_CONFIG_INCLUDE_DIR}/Config.h
+    )
+  ELSE()
+    set(CEGUI_CONFIG_HEADERS
+      ${CEGUI_CONFIG_INCLUDE_DIR}/CEGUIConfig.h
+    )
+  ENDIF()
   foreach(CFG_FILE ${CEGUI_CONFIG_HEADERS})
     if (EXISTS ${CFG_FILE})
       set(CEGUI_CONFIG_HEADER ${CFG_FILE})
@@ -147,17 +168,9 @@ if (CEGUI_INCLUDE_DIR)
   
   if (CEGUI_CONFIG_HEADERS)
     file(READ ${CEGUI_CONFIG_HEADERS} CEGUI_TEMP_CONFIG_CONTENT)
-    has_preprocessor_entry(CEGUI_TEMP_CONFIG_CONTENT CEGUI_STATIC_LIB CEGUI_CONFIG_STATIC)
-    get_preprocessor_entry(CEGUI_TEMP_CONFIG_CONTENT CEGUI_THREAD_SUPPORT CEGUI_CONFIG_THREADS)
-    get_preprocessor_entry(CEGUI_TEMP_CONFIG_CONTENT CEGUI_THREAD_PROVIDER CEGUI_CONFIG_THREAD_PROVIDER)
-    get_preprocessor_entry(CEGUI_TEMP_CONFIG_CONTENT CEGUI_NO_FREEIMAGE CEGUI_CONFIG_FREEIMAGE)
-    if (CEGUI_CONFIG_STATIC AND CEGUI_STATIC)
-    elseif (CEGUI_CONFIG_STATIC OR CEGUI_STATIC)
-      pkg_message(CEGUI "Build type (static, dynamic) does not match the requested one.")
-      set(CEGUI_INCOMPATIBLE TRUE)
-    endif ()
+    get_preprocessor_entry(CEGUI_TEMP_CONFIG_CONTENT CEGUI_NO_FREEIMAGE CEGUI_HAS_FREETYPE)
   else ()
-    pkg_message(OGRE "Could not determine Ogre build configuration.")
+    pkg_message(CEGUI "Could not determine CEGUI build configuration.")
     set(CEGUI_INCOMPATIBLE TRUE)
   endif ()
 else ()
@@ -270,3 +283,8 @@ endforeach (comp)
 
 
 clear_if_changed(CEGUI_PREFIX_WATCH)
+
+if (CEGUI_STATIC)
+  set(CMAKE_FIND_LIBRARY_SUFFIXES "${CMAKE_FIND_LIBRARY_SUFFIXES_OLD}")
+endif()
+

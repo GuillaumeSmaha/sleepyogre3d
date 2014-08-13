@@ -4,30 +4,35 @@ template<> PlayerControls * ClassRootSingleton<PlayerControls>::_instance = 0;
 
 PlayerControls::PlayerControls() : ClassRootSingleton<PlayerControls>()
 { 
-    this->setDefaultKeys();
+  this->setDefaultKeys();
 
-    ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.add(&PlayerControls::keyboardStillPressed, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyPressed.add(&PlayerControls::keyboardPressed, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyReleased.add(&PlayerControls::keyboardReleased, this);
-    ListenerMouse::getSingletonPtr()->signalMouseMoved.add(&PlayerControls::mouseMoved, this);
-    ListenerMouse::getSingletonPtr()->signalMousePressed.add(&PlayerControls::mousePressed, this);
-    ListenerMouse::getSingletonPtr()->signalMouseReleased.add(&PlayerControls::mouseReleased, this);
-
+  ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.add(&PlayerControls::keyboardStillPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyPressed.add(&PlayerControls::keyboardPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyReleased.add(&PlayerControls::keyboardReleased, this);
+  ListenerMouse::getSingletonPtr()->signalMouseMoved.add(&PlayerControls::mouseMoved, this);
+  ListenerMouse::getSingletonPtr()->signalMousePressed.add(&PlayerControls::mousePressed, this);
+  ListenerMouse::getSingletonPtr()->signalMouseReleased.add(&PlayerControls::mouseReleased, this);
 }
 
 PlayerControls::~PlayerControls()
 {
-    ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.remove(&PlayerControls::keyboardStillPressed, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyPressed.remove(&PlayerControls::keyboardPressed, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyReleased.remove(&PlayerControls::keyboardReleased, this);
-    ListenerMouse::getSingletonPtr()->signalMouseMoved.remove(&PlayerControls::mouseMoved, this);
-    ListenerMouse::getSingletonPtr()->signalMousePressed.remove(&PlayerControls::mousePressed, this);
-    ListenerMouse::getSingletonPtr()->signalMouseReleased.remove(&PlayerControls::mouseReleased, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.remove(&PlayerControls::keyboardStillPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyPressed.remove(&PlayerControls::keyboardPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyReleased.remove(&PlayerControls::keyboardReleased, this);
+  ListenerMouse::getSingletonPtr()->signalMouseMoved.remove(&PlayerControls::mouseMoved, this);
+  ListenerMouse::getSingletonPtr()->signalMousePressed.remove(&PlayerControls::mousePressed, this);
+  ListenerMouse::getSingletonPtr()->signalMouseReleased.remove(&PlayerControls::mouseReleased, this);
+  
+  ListenerMouse::getSingletonPtr()->signalMouseMoved.remove(&PlayerControls::mouseMovedInPause, this);
+  ListenerMouse::getSingletonPtr()->signalMousePressed.remove(&PlayerControls::mousePressedInPause, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyPressed.remove(&PlayerControls::keyboardPressedInPause, this);
+  
+  this->resetControls();
 }
 
 void PlayerControls::setDefaultKeys()
 {
-    this->resetControls();
+  this->resetControls();
     
 	this->setMouseControl(Controls::CAMERA_TRANSLATE_MOUSE, OIS::MB_Middle);
 	this->setMouseControl(Controls::CAMERA_ROTATE_MOUSE, OIS::MB_Right);
@@ -121,30 +126,32 @@ void PlayerControls::setMouseControl(const Controls::Controls keyControl, const 
 	}
 }
 
-void PlayerControls::suspendreEcoute()
+void PlayerControls::suspendListening()
 {
-    ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.remove(&PlayerControls::keyboardStillPressed, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyPressed.remove(&PlayerControls::keyboardPressed, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyReleased.remove(&PlayerControls::keyboardReleased, this);
-    ListenerMouse::getSingletonPtr()->signalMouseMoved.remove(&PlayerControls::mouseMoved, this);
-    ListenerMouse::getSingletonPtr()->signalMousePressed.remove(&PlayerControls::mousePressed, this);
-    ListenerMouse::getSingletonPtr()->signalMouseReleased.remove(&PlayerControls::mouseReleased, this);
-    
-    ListenerMouse::getSingletonPtr()->signalMousePressed.add(&PlayerControls::mousePressedInPause, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyPressed.add(&PlayerControls::keyboardPressedInPause, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.remove(&PlayerControls::keyboardStillPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyPressed.remove(&PlayerControls::keyboardPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyReleased.remove(&PlayerControls::keyboardReleased, this);
+  ListenerMouse::getSingletonPtr()->signalMouseMoved.remove(&PlayerControls::mouseMoved, this);
+  ListenerMouse::getSingletonPtr()->signalMousePressed.remove(&PlayerControls::mousePressed, this);
+  ListenerMouse::getSingletonPtr()->signalMouseReleased.remove(&PlayerControls::mouseReleased, this);
+  
+  ListenerMouse::getSingletonPtr()->signalMouseMoved.add(&PlayerControls::mouseMovedInPause, this);
+  ListenerMouse::getSingletonPtr()->signalMousePressed.add(&PlayerControls::mousePressedInPause, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyPressed.add(&PlayerControls::keyboardPressedInPause, this);
 }
 
-void PlayerControls::reprendreEcoute()
+void PlayerControls::continueListening()
 {
-    ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.add(&PlayerControls::keyboardStillPressed, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyPressed.add(&PlayerControls::keyboardPressed, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyReleased.add(&PlayerControls::keyboardReleased, this);
-    ListenerMouse::getSingletonPtr()->signalMouseMoved.add(&PlayerControls::mouseMoved, this);
-    ListenerMouse::getSingletonPtr()->signalMousePressed.add(&PlayerControls::mousePressed, this);
-    ListenerMouse::getSingletonPtr()->signalMouseReleased.add(&PlayerControls::mouseReleased, this);
-    
-    ListenerMouse::getSingletonPtr()->signalMousePressed.remove(&PlayerControls::mousePressedInPause, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyPressed.remove(&PlayerControls::keyboardPressedInPause, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.add(&PlayerControls::keyboardStillPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyPressed.add(&PlayerControls::keyboardPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyReleased.add(&PlayerControls::keyboardReleased, this);
+  ListenerMouse::getSingletonPtr()->signalMouseMoved.add(&PlayerControls::mouseMoved, this);
+  ListenerMouse::getSingletonPtr()->signalMousePressed.add(&PlayerControls::mousePressed, this);
+  ListenerMouse::getSingletonPtr()->signalMouseReleased.add(&PlayerControls::mouseReleased, this);
+  
+  ListenerMouse::getSingletonPtr()->signalMouseMoved.remove(&PlayerControls::mouseMovedInPause, this);
+  ListenerMouse::getSingletonPtr()->signalMousePressed.remove(&PlayerControls::mousePressedInPause, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyPressed.remove(&PlayerControls::keyboardPressedInPause, this);
 }
 
 
@@ -183,6 +190,41 @@ void PlayerControls::keyboardPressedInPause(const OIS::KeyEvent &evt)
 			{
 				 this->signalKeyPressedInPause.dispatch(keyControls);
 			}
+		}
+	}
+}
+
+void PlayerControls::mouseMovedInPause(MouseMove_t &mouseMove)
+{
+	if(this->getMouseMovedActif())
+	{
+    if(mouseMove.mouseId >= 0)
+    {        
+			std::set<Controls::Controls>::iterator it;
+			
+			std::set<Controls::Controls> keys = this->OISEventToControlKey(mouseMove.mouseId);
+			
+			if(!keys.empty())
+			{
+				for(it = keys.begin() ; it != keys.end() ; it ++)
+				{
+					MouseMove_t mouseMoveCopy = mouseMove;
+					
+					mouseMoveCopy.controlMouseId = *it;
+					
+					this->signalMouseMovedInPause.dispatch(mouseMoveCopy);
+				}
+			}
+			else
+			{
+				mouseMove.controlMouseId = Controls::NONE;
+				this->signalMouseMovedInPause.dispatch(mouseMove);
+			}
+		}
+		else
+		{
+			mouseMove.controlMouseId = Controls::NONE;
+			this->signalMouseMovedInPause.dispatch(mouseMove);
 		}
 	}
 }
@@ -251,9 +293,8 @@ void PlayerControls::mouseMoved(MouseMove_t &mouseMove)
 {
 	if(this->getMouseMovedActif())
 	{
-        
-        if(mouseMove.mouseId >= 0)
-        {        
+    if(mouseMove.mouseId >= 0)
+    {        
 			std::set<Controls::Controls>::iterator it;
 			
 			std::set<Controls::Controls> keys = this->OISEventToControlKey(mouseMove.mouseId);

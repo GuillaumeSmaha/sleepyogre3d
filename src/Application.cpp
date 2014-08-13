@@ -20,7 +20,7 @@ Application::~Application()
 	GestInteraction::destroySingleton();
 	
 	// Destroy the stats
-	StatsOverlay::destroySingleton();
+	//StatsOverlay::destroySingleton();
 	
 	// Destroy the menus
 	InitMenus::destroy();
@@ -40,7 +40,7 @@ Application::~Application()
 	// Destroy the ogre root and scene manager
 	InitSceneGraph::destroy();
     
-    std::cerr << "Singletons destroyed" << std::endl;
+  std::cerr << "Singletons destroyed" << std::endl;
 }
 
 bool Application::start()
@@ -57,9 +57,6 @@ bool Application::start()
 	
 	// Init the listeners
 	InitListener::init();
-
-	// Initialisation des ressources
-	Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 	
 	// Init the viewports
 	InitViewport::init();
@@ -74,7 +71,7 @@ bool Application::start()
 	InitCamera::init();
 
 	// Create debugging overlay
-	//~ StatsOverlay::createSingleton();
+	//StatsOverlay::createSingleton();
 
 	// start the scene rendering (main loop)
 	GestSceneManager::getRoot()->startRendering();
@@ -103,6 +100,12 @@ void Application::loadRessources()
 			typeName = i->first;
 			archName = i->second;
 			Ogre::ResourceGroupManager::getSingleton().addResourceLocation(archName, typeName, secName);
+      printf("archName : %s\n", archName.c_str());
+      printf("typeName : %s\n", typeName.c_str());
+      printf("secName : %s\n", secName.c_str());
 		}
 	}
+  
+	// Initialisation des ressources
+  Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }

@@ -15,7 +15,7 @@ void ListenerFrame::createSingleton(Ogre::Root * root)
 
 ListenerFrame::ListenerFrame(Ogre::Root * root) : ClassRootSingleton<ListenerFrame>(), closed(false)
 {
-   	root->addFrameListener(this);   	
+  root->addFrameListener(this);   	
 
 	//Add signals to close the application
 	ListenerWindow::getSingletonPtr()->signalWindowClosed.add(&ListenerFrame::shutdown, this);

@@ -3,7 +3,7 @@
 void InitControls::init()
 {
 	//Create MouseFunction Singleton
-    MouseFunction::createSingleton(ListenerWindow::getSingletonPtr()->getRenderWindow());
+  MouseFunction::createSingleton(ListenerWindow::getSingletonPtr()->getRenderWindow());
 
 	//Create PlayerControls Singleton
 	PlayerControls::createSingleton();

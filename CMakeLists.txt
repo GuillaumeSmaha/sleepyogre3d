@@ -41,11 +41,11 @@ include(Function)
 #Include des dépendances
 FIND_PACKAGE( OIS REQUIRED )
 FIND_PACKAGE( OGRE REQUIRED )
-FIND_PACKAGE( CEGUI REQUIRED )
+FIND_PACKAGE( CEGUI )
 
  
-IF (NOT "${OGRE_VERSION_NAME}" STREQUAL "Byatis")
-	MESSAGE(SEND_ERROR "You need Ogre 1.8 Byatis to build this.")
+IF (NOT "${OGRE_VERSION_NAME}" STREQUAL "Ghadamon")
+	MESSAGE(SEND_ERROR "You need Ogre 1.9 Ghadamon to build this.")
 ENDIF()
 
 IF(NOT CEGUI_OgreRenderer_FOUND)
@@ -54,8 +54,6 @@ ENDIF()
 
 
 #Copie des fichiers pour l'éxécution
-writeResourceFile("${CMAKE_BINARY_DIR}/" 0)
-writePluginFile("${CMAKE_BINARY_DIR}/" 0)
 IF(WIN32)
 	writeResourceFile("${CMAKE_BINARY_DIR}/" 1)
 	writePluginFile("${CMAKE_BINARY_DIR}/" 1)
@@ -85,7 +83,12 @@ IF(WIN32)
 		copyFile("${CEGUI_BINARY_DIR_REL}/CEGUIDirect3D10Renderer.dll" "${CMAKE_BINARY_DIR}/Release/")
 		copyFile("${CEGUI_BINARY_DIR_REL}/CEGUIDirect3D11Renderer.dll" "${CMAKE_BINARY_DIR}/Release/")
 	ENDIF (NOT MINGW)
-ENDIF(WIN32)
+ELSE()
+    writeResourceFile("${CMAKE_BINARY_DIR}/" 0)
+    writePluginFile("${CMAKE_BINARY_DIR}/" 0)
+    writeResourceFile("${CMAKE_BINARY_DIR}/" 1)
+    writePluginFile("${CMAKE_BINARY_DIR}/" 1)
+ENDIF()
 
 IF(CMAKE_COMPILER_IS_GNUCC)
 	ADD_DEFINITIONS(-pipe)

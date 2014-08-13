@@ -12,14 +12,13 @@ void InitScene::init()
 	Ogre::SceneNode * nodeLight1 = GestSceneManager::getSceneManager()->getRootSceneNode()->createChildSceneNode("NodeLight1");
 	nodeLight1->attachObject(l);		
 	
-	
+  
 	Ogre::SceneNode * ogreHeadNode = GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_OBJECT)->createChildSceneNode("OgreNode");
-	Ogre::Entity * ogreHead = GestSceneManager::getSingletonPtr()->createEntity("Ogre", "Ogre.mesh");
+  Ogre::Entity * ogreHead = GestSceneManager::getSingletonPtr()->createEntity("OgreHead", "OgreHead.mesh");
 	ogreHeadNode->attachObject(ogreHead);
-	
-    
-    CameraAbstract * camera = GestCamera::getSingletonPtr()->addCamera(CameraAbstract::CAMERA_TARGET, "mainCam", ogreHeadNode);
-    CameraAbstract * camera4 = GestCamera::getSingletonPtr()->addCamera(CameraAbstract::CAMERA_ORBITAL_TARGET, "mainCam4", ogreHeadNode);
+
+  CameraAbstract * camera = GestCamera::getSingletonPtr()->addCamera(CameraAbstract::CAMERA_TARGET, "mainCam", ogreHeadNode);
+  CameraAbstract * camera4 = GestCamera::getSingletonPtr()->addCamera(CameraAbstract::CAMERA_ORBITAL_TARGET, "mainCam4", ogreHeadNode);
     
 	GestViewport::getSingletonPtr()->addViewport(camera);
 	GestViewport::getSingletonPtr()->addViewport(camera4);

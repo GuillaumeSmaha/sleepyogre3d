@@ -6,20 +6,20 @@ template<> MouseFunction * ClassRootSingleton<MouseFunction>::_instance = 0;
 
 CEGUI::MouseButton MouseFunction::convertButton(OIS::MouseButtonID id)
 {
-    switch(id)
-    {
-        case OIS::MB_Left:
-            return CEGUI::LeftButton;
+  switch(id)
+  {
+    case OIS::MB_Left:
+      return CEGUI::LeftButton;
 
-        case OIS::MB_Right:
-            return CEGUI::RightButton;
+    case OIS::MB_Right:
+      return CEGUI::RightButton;
 
-        case OIS::MB_Middle:
-            return CEGUI::MiddleButton;
+    case OIS::MB_Middle:
+      return CEGUI::MiddleButton;
 
-        default:
-            return CEGUI::LeftButton;
-    }
+    default:
+      return CEGUI::LeftButton;
+  }
 }
 
 

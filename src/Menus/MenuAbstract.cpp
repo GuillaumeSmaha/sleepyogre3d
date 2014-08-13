@@ -73,24 +73,24 @@ bool MenuAbstract::actionButtonClose(const CEGUI::EventArgs & evt)
 
 void MenuAbstract::windowCreateBase(float posX, float posY, float width, float height, CEGUI::Window ** content)
 {
-    //création de la nouvelle fenetre
-    CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-    this->window = wmgr.createWindow("DefaultWindow", "Briquette/"+this->name+"main");
+  //création de la nouvelle fenetre
+  CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+  this->window = wmgr.createWindow("DefaultWindow", "MainMenu/"+this->name+"main");
 
-    //Titlebar
-    CEGUI::Window * titlebar = wmgr.createWindow("TaharezLook/Titlebar", "Briquette/titlebar"+this->name);
-    titlebar->setText(name);
-    titlebar->setSize(CEGUI::UVector2(CEGUI::UDim(width, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
-    titlebar->setPosition(CEGUI::UVector2(CEGUI::UDim(posX, 0.0f), CEGUI::UDim(posY, 0.0f)));
-    this->window->addChildWindow(titlebar);
+  //Titlebar
+  CEGUI::Window * titlebar = wmgr.createWindow("TaharezLook/Titlebar", "MainMenu/titlebar"+this->name);
+  titlebar->setText(name);
+  titlebar->setSize(CEGUI::UVector2(CEGUI::UDim(width, 0.0f), CEGUI::UDim(0.05f, 0.0f)));
+  titlebar->setPosition(CEGUI::UVector2(CEGUI::UDim(posX, 0.0f), CEGUI::UDim(posY, 0.0f)));
+  this->window->addChildWindow(titlebar);
 
-    //création du background
-    CEGUI::Window * menuBackground = wmgr.createWindow("TaharezLook/StaticImage", "Background"+this->name);
-    menuBackground->setSize(CEGUI::UVector2(CEGUI::UDim(width, 0.0f), CEGUI::UDim(height, 0.0f)));
-    menuBackground->setPosition(CEGUI::UVector2(CEGUI::UDim(posX, 0.0f),CEGUI::UDim((posY+0.05f), 0.0f)));
+  //création du background
+  CEGUI::Window * menuBackground = wmgr.createWindow("TaharezLook/StaticImage", "Background"+this->name);
+  menuBackground->setSize(CEGUI::UVector2(CEGUI::UDim(width, 0.0f), CEGUI::UDim(height, 0.0f)));
+  menuBackground->setPosition(CEGUI::UVector2(CEGUI::UDim(posX, 0.0f),CEGUI::UDim((posY+0.05f), 0.0f)));
 
-    if(content[0] != 0)
-    {
+  if(content[0] != 0)
+  {
 		int i = 0;
 		while(content[i] != 0)
 		{
@@ -103,7 +103,7 @@ void MenuAbstract::windowCreateBase(float posX, float posY, float width, float h
 	if(this->buttonCloseShow)
 	{
 		//On ajoute un close bouton à chaque fenetre
-		CEGUI::Window * quit = wmgr.createWindow("SleekSpace/Button", "Briquette/close"+this->name);
+		CEGUI::Window * quit = wmgr.createWindow("SleekSpace/Button", "MainMenu/close"+this->name);
 		quit->setText("Fermer");
 		quit->setSize(CEGUI::UVector2(CEGUI::UDim( 0.2f, 0.0f ), CEGUI::UDim( 0.14f, 0.0f )));
 		quit->setPosition( UVector2( UDim( 0.8f, 0.0f ), UDim( 0.85, 0.0f ) ) );
@@ -111,7 +111,7 @@ void MenuAbstract::windowCreateBase(float posX, float posY, float width, float h
 		menuBackground->addChildWindow(quit);
 	}
     
-    this->window->addChildWindow(menuBackground);
+  this->window->addChildWindow(menuBackground);
 }
 
 

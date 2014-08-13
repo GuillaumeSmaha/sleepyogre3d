@@ -1,26 +1,6 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of SleepyOgre3D
- 
-Copyright (c) 2011 Guillaume Smaha
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 -----------------------------------------------------------------------------
 */
 /*!
@@ -72,6 +52,13 @@ class GestMenus : public ClassRootSingleton<GestMenus>
 
 	public:
         /*!
+         * \brief Charge un layout
+         * \param layout The layout to load
+         */
+        void loadWindowLayout(CEGUI::String layout);
+  
+  
+        /*!
          * \brief Lance l'affichage des différents éléments du menus lors de l'activation de celui ci
          * \param menu The menu
          */
@@ -101,7 +88,7 @@ class GestMenus : public ClassRootSingleton<GestMenus>
          * \brief Permet de déplacer la souris en lui injectant le vecteur x, y.
          * La souris n'est pas géré directement dans cette classe mais dans la
          * classe MouseFunction car en réalité on à 2 souris (la souris du
-         * menus CEGUI et la souris de bullet pour attraper les briquettes.
+         * menus CEGUI et la souris de bullet.
          *
          * Cette fonction permet donc a GestInteraction de déplacer la souris de
          * CEGUI pour que les deux ai la même position

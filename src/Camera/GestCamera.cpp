@@ -13,7 +13,7 @@ GestCamera::~GestCamera()
 
 void GestCamera::addCamera(CameraAbstract * camera)
 {
-    this->listCameras.push_back(camera);
+  this->listCameras.push_back(camera);
 }
 
 
@@ -83,9 +83,9 @@ bool GestCamera::removeCamera(unsigned int id)
 
 CameraAbstract * GestCamera::getCamera(unsigned int id)
 {
-    if(id >= this->listCameras.size())
-    {
-        return 0;
-    }
-    return this->listCameras.at(id);
+  if(id >= this->listCameras.size())
+  {
+      return 0;
+  }
+  return this->listCameras.at(id);
 }

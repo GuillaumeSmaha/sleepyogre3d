@@ -14,13 +14,14 @@ CameraAbstract::CameraAbstract(Ogre::String cameraName)
 	// enable infinite far clip distance if we can
 	if (Ogre::Root::getSingleton().getRenderSystem()->getCapabilities()->hasCapability(Ogre::RSC_INFINITE_FAR_PLANE))
 		this->camera->setFarClipDistance(0);
-    //permet de gérer les déplacements de caméra
     
-    this->nodeCamera = GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA)->createChildSceneNode("nodeCamera_"+cameraName+"_"+Utils::toString(Utils::unique()));
-    this->nodeCamera->attachObject(this->camera);
-    
-    this->translateStep = 1.0;
-    this->rotateStep = 0.01;
+  //permet de gérer les déplacements de caméra
+  
+  this->nodeCamera = GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA)->createChildSceneNode("nodeCamera_"+cameraName+"_"+Utils::toString(Utils::unique()));
+  this->nodeCamera->attachObject(this->camera);
+  
+  this->translateStep = 1.0;
+  this->rotateStep = 0.01;
     
 
 	PlayerControls::getSingletonPtr()->signalMouseMoved.add(&CameraAbstract::onMouseMoved, this);
@@ -203,21 +204,21 @@ void CameraAbstract::onMouseMoved(MouseMove_t &mouseMove)
 	if(!GestInteraction::getSingletonPtr()->getMoveAllCamera() && !this->isInViewport(posMouse))
 		return;
 	
-    switch(mouseMove.controlMouseId)
-    {
+  switch(mouseMove.controlMouseId)
+  {
 		case Controls::CAMERA_TRANSLATE_MOUSE :
 			this->applyTranslateMouse(mouseMove);
 			break;
 		
 		case Controls::CAMERA_ROTATE_MOUSE :
-			this->applyRotateMouse(mouseMove);
-			break;
-		
-        default:
-            break;
-    }
-    
-    this->applyWheelMouse(mouseMove);
+      this->applyRotateMouse(mouseMove);
+      break;
+
+    default:
+      break;
+  }
+  
+  this->applyWheelMouse(mouseMove);
 }
 
 
@@ -227,8 +228,8 @@ void CameraAbstract::onKeyStillPressed(Controls::Controls key)
 	if(!GestInteraction::getSingletonPtr()->getMoveAllCamera() && !this->isInViewport(posMouse))
 		return;
 		
-    switch(key)
-    {
+  switch(key)
+  {
 		case Controls::CAMERA_TRANSLATE_BEFORE :
 			this->applyTranslateBeforce();
 			break;
@@ -269,9 +270,9 @@ void CameraAbstract::onKeyStillPressed(Controls::Controls key)
 			this->applyRotateDown();
 			break;
 			
-        default:
-            break;
-    }
+    default:
+      break;
+  }
 }
 
 void CameraAbstract::onKeyPressed(Controls::Controls key)
@@ -280,19 +281,18 @@ void CameraAbstract::onKeyPressed(Controls::Controls key)
 	if(!GestInteraction::getSingletonPtr()->getMoveAllCamera() && !this->isInViewport(posMouse))
 		return;
 		
-    switch(key)
+  switch(key)
+  {
+    case Controls::ADD_CAMERA :
     {
-        case Controls::ADD_CAMERA :
-        {
-			static CameraAbstract * camera3 = GestCamera::getSingletonPtr()->addCamera(CameraAbstract::CAMERA_TARGET, "mainCam3", GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA_TARGET));
-			GestViewport::getSingletonPtr()->addViewport(camera3);
-            break;
-		}
-		
-        default:
-            break;
+      static CameraAbstract * camera3 = GestCamera::getSingletonPtr()->addCamera(CameraAbstract::CAMERA_TARGET, "mainCam3", GestSceneManager::getSceneManager()->getSceneNode(NODE_NAME_GROUPE_CAMERA_TARGET));
+      GestViewport::getSingletonPtr()->addViewport(camera3);
+      break;
     }
-    
+  
+    default:
+      break;
+  }
 }
 
 void CameraAbstract::onKeyReleased(Controls::Controls key)

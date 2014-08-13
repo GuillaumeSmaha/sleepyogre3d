@@ -1,26 +1,6 @@
 /*
 -----------------------------------------------------------------------------
 This source file is part of SleepyOgre3D
- 
-Copyright (c) 2011 Guillaume Smaha
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies
-of the Software, and to permit persons to whom the Software is furnished to do
-so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 -----------------------------------------------------------------------------
 */
 /*!
@@ -64,42 +44,46 @@ class PlayerControls: public ClassRootSingleton<PlayerControls>
 	
 
 	private:
-         /*!
+    /*!
 		 * \brief Lie une touche à un contrôle (déplacement, tir). 
-         * par exemple listKeyControl[25].insert(SHOOT) position la touche repéré par le code 25 sur l'action SHOOT
+     * par exemple listKeyControl[25].insert(SHOOT) positionne la touche repéré par le code 25 sur l'action SHOOT
 		 */
-        std::vector< std::set<Controls::Controls> > listKeyControl;
-         /*!
+    std::vector< std::set<Controls::Controls> > listKeyControl;
+    /*!
 		 * \brief Lie un bouton de souris à un contrôle.
 		 */
-        std::vector< std::set<Controls::Controls> > listMouseControl;
-         /*!
+    std::vector< std::set<Controls::Controls> > listMouseControl;
+    /*!
 		 * \brief Indique si le mouseMove est pris en compte pour les mouvements du vaisseau
 		 */
-        bool mouseMovedActif;
+    bool mouseMovedActif;
 
        
 	public:
 		/*!
-		 * \brief Emet un dispatche lorsqu'une touche est préssée pendant la pause Signal(Controls::Controls key)
-		 */
-        Signal<Controls::Controls> signalKeyPressedInPause;
-		/*!
 		 * \brief Emet un dispatche lorsqu'une touche est resté préssée (seulement pour le clavier) Signal(Controls::Controls key)
 		 */
-        Signal<Controls::Controls> signalKeyStillPressed;
+    Signal<Controls::Controls> signalKeyStillPressed;
 		/*!
 		 * \brief Emet un dispatche lorsqu'une touche est préssée  Signal(Controls::Controls key)
 		 */
-        Signal<Controls::Controls> signalKeyPressed;
+    Signal<Controls::Controls> signalKeyPressed;
         /*!
 		 * \brief Emet un dispatche lorsqu'une touche est relâchée  Signal(Controls::Controls key)
 		 */
-        Signal<Controls::Controls> signalKeyReleased;
-         /*!
-		 * \brief Emet un dispatche lorsque la souris est déplacée Signal(Ogre::MouseMove_t)
+    Signal<Controls::Controls> signalKeyReleased;
+    /*!
+		 * \brief Emet un dispatche lorsque la souris est déplacée Signal(MouseMove_t)
 		 */
-        Signal<MouseMove_t&> signalMouseMoved;
+    Signal<MouseMove_t&> signalMouseMoved;
+		/*!
+		 * \brief Emet un dispatche lorsqu'une touche est préssée pendant la pause Signal(Controls::Controls key)
+		 */
+    Signal<Controls::Controls> signalKeyPressedInPause;
+    /*!
+		 * \brief Emet un dispatche lorsque la souris est déplacée pendant la pause Signal(MouseMove_t)
+		 */
+    Signal<MouseMove_t&> signalMouseMovedInPause;
  
     public:
         /*!
@@ -143,89 +127,94 @@ class PlayerControls: public ClassRootSingleton<PlayerControls>
          * \brief Permet d'arréter de réagir aux listeners 
          * Utile lorsque le menu est activé.
         */
-        void suspendreEcoute();
+        void suspendListening();
         /*!
          * \brief Permet de rependre l'écoute des listeneurs
          * Appelé aprés que le menu ai été fermé.
         */
-        void reprendreEcoute();
+        void continueListening();
         
         
     private:
-         /*!
+    /*!
 		 * \brief Reçoit un dispatche lorsqu'une touche du clavier est pressée pendant la pause et le transmet à signalKeyPressed
 		 * \param id Evénement du clavier
 		 */
-        void mousePressedInPause(const OIS::MouseButtonID id);
-         /*!
+    void mousePressedInPause(const OIS::MouseButtonID id);
+    /*!
+		 * \brief Reçoit un dispatche lorsqu'un la souris est bougée pendant la pause et le transmet à signalMouseMoved
+		 * \param mouseMove Structure de déplacement de la souris
+		 */
+    void mouseMovedInPause(MouseMove_t &mouseMove);
+    /*!
 		 * \brief Reçoit un dispatche lorsqu'une touche du clavier est pressée pendant la pause et le transmet à signalKeyPressed
 		 * \param evt Evénement du clavier
 		 */
-        void keyboardPressedInPause(const OIS::KeyEvent &evt);
+    void keyboardPressedInPause(const OIS::KeyEvent &evt);
         
-         /*!
+    /*!
 		 * \brief Reçoit un dispatche lorsqu'une touche du clavier est resté pressée et le transmet à signalKeyStillPressed
 		 * \param key Evénement du clavier
 		 */
-        void keyboardStillPressed(const OIS::KeyCode key);
-         /*!
+    void keyboardStillPressed(const OIS::KeyCode key);
+    /*!
 		 * \brief Reçoit un dispatche lorsqu'une touche du clavier est pressée et le transmet à signalKeyPressed
 		 * \param evt Evénement du clavier
 		 */
-        void keyboardPressed(const OIS::KeyEvent &evt);
-        /*!
+    void keyboardPressed(const OIS::KeyEvent &evt);
+    /*!
 		 * \brief Reçoit un dispatche lorsqu'une touche du clavier est relâchée et le transmet à signalKeyReleased
 		 * \param evt Evénement du clavier
 		 */
-        void keyboardReleased(const OIS::KeyEvent &evt);
-        /*!
+    void keyboardReleased(const OIS::KeyEvent &evt);
+    /*!
 		 * \brief Reçoit un dispatche lorsqu'un la souris est bougée et le transmet à signalMouseMoved
 		 * \param mouseMove Structure de déplacement de la souris
 		 */
-        void mouseMoved(MouseMove_t &mouseMove);
-        /*!
+    void mouseMoved(MouseMove_t &mouseMove);
+    /*!
 		 * \brief Reçoit un dispatche lorsqu'une touche de la souris est pressée et le transmet à signalMousePressed
 		 * \param id Evénement de la souris
 		 */
-        void mousePressed(const OIS::MouseButtonID id);
-        /*!
+    void mousePressed(const OIS::MouseButtonID id);
+    /*!
 		 * \brief Reçoit un dispatche lorsqu'une touche de la souris est relâchée et le transmet à signalMouseReleased
 		 * \param id Evénement de la souris
 		 */
-        void mouseReleased(const OIS::MouseButtonID id);
-        /*!
+    void mouseReleased(const OIS::MouseButtonID id);
+    /*!
 		 * \brief Convertit un évènement OIS::KeyEvent en Controls::Controls pour se défaire du couplage aux touches physiques
 		 * \param key Evénement du clavier (OIS)
 		 * \return Touches correspondantes
 		 */
-        std::set<Controls::Controls> & OISEventToControlKey(const OIS::KeyCode key);
-        /*!
+    std::set<Controls::Controls> & OISEventToControlKey(const OIS::KeyCode key);
+    /*!
 		 * \brief Convertit un évènement OIS::KeyEvent en Controls::Controls pour se défaire du couplage aux touches physiques
 		 * \param evt Evénement du clavier (OIS)
 		 * \return Touches correspondantes
 		 */
-        std::set<Controls::Controls> & OISEventToControlKey(const OIS::KeyEvent &evt);
-        /*!
+    std::set<Controls::Controls> & OISEventToControlKey(const OIS::KeyEvent &evt);
+    /*!
 		 * \brief Convertit un id IS::MouseButtonID en Controls::Controls pour se défaire du couplage aux touches physiques
 		 * \param id Evénement de la souris (OIS)
 		 * \return Touches correspondantes
 		 */
-        std::set<Controls::Controls> & OISEventToControlKey(const OIS::MouseButtonID id);
+    std::set<Controls::Controls> & OISEventToControlKey(const OIS::MouseButtonID id);
         
         
-        //Getter-Setter
+//Getter-Setter
         
 	public:        
-         /*!
+    /*!
 		 * \brief [Getter] Recupère la valeur de mouseMovedActif
 		 * \return Indique si le mouvement de la souris est actif pour le vaisseau
 		 */
-        bool getMouseMovedActif();
-         /*!
+    bool getMouseMovedActif();
+    /*!
 		 * \brief [Setter] Définit la valeur de mouseMovedActif
 		 * \param mouseMovedActif Indique si le mouvement de la souris est actif pour le vaisseau
 		 */
-        void setMouseMovedActif(bool mouseMovedActif);
+    void setMouseMovedActif(bool mouseMovedActif);
 
 
 };

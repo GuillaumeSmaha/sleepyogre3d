@@ -44,11 +44,9 @@ GestSceneManager::~GestSceneManager()
 		this->sceneManager->clearScene();
 		this->root->destroySceneManager(this->sceneManager);
 	}
-	
-	delete this->root;
 }
 
 Ogre::Entity * GestSceneManager::createEntity(const Ogre::String &name, const Ogre::String meshName)
 {
-    return this->sceneManager->createEntity(name, meshName);
+  return this->sceneManager->createEntity(name, meshName);
 }

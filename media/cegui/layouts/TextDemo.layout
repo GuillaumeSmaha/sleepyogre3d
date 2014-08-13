@@ -5,11 +5,90 @@
         <Property Name="InheritsAlpha" Value="False" />
         <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
         <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+        
+
+       <Window Type="TaharezLook/StaticText" Name="Panel 1">
+            <Property Name="UnifiedPosition" Value="{{0,0},{0.83,0}}" />
+            <Property Name="UnifiedSize" Value="{{0.23,0},{0.17,0}}" />
+            <Property Name="Alpha" Value="0.9" />
+            <Property Name="InheritsAlpha" Value="False" />
+
+            <Window Type="TaharezLook/StaticText" Name="OPCurrentFPS">
+                <Property Name="FrameEnabled" Value="False" />
+                <Property Name="BackgroundEnabled" Value="False" />
+                <Property Name="Font" Value="BlueHighway-10" />
+                <Property Name="UnifiedPosition" Value="{{0.075,0},{0.12,0}}" />
+                <Property Name="UnifiedSize" Value="{{0.85,0},{0.25,0}}" />
+                <Property Name="TextColours" Value="tl:FF4FF06F tr:FF4FF06F bl:FF4FF06F br:FF4FF06F" />
+                <Property Name="HorzFormatting" Value="HorzCentred" />
+                <Property Name="Text" Value="Current FPS: " />
+            </Window>
+
+            <Window Type="TaharezLook/StaticImage" Name="OPBar1">
+                <Property Name="FrameEnabled" Value="False" />
+                <Property Name="BackgroundEnabled" Value="False" />
+                <Property Name="UnifiedPosition" Value="{{0.2,0},{0.27,0}}" />
+                <Property Name="UnifiedSize" Value="{{0.6,0},{0.025,0}}" />
+            </Window>
+
+            <Window Type="TaharezLook/StaticText" Name="OPAverageFPS">
+                <Property Name="FrameEnabled" Value="False" />
+                <Property Name="BackgroundEnabled" Value="False" />
+                <Property Name="Font" Value="BlueHighway-10" />
+                <Property Name="UnifiedPosition" Value="{{0.075,0},{0.32,0}}" />
+                <Property Name="UnifiedSize" Value="{{1.0,0},{0.25,0}}" />
+                <Property Name="TextColours" Value="tl:FFFFF5F0 tr:FFFFF5F0 bl:FFFFF510 br:FFFFF5F0" />
+                <Property Name="Text" Value="Average FPS: " />
+            </Window>
+
+            <Window Type="TaharezLook/StaticText" Name="OPWorstFPS">
+                <Property Name="FrameEnabled" Value="False" />
+                <Property Name="BackgroundEnabled" Value="False" />
+                <Property Name="Font" Value="BlueHighway-10" />
+                <Property Name="UnifiedPosition" Value="{{0.075,0},{0.45,0}}" />
+                <Property Name="UnifiedSize" Value="{{1.0,0},{0.25,0}}" />
+                <Property Name="TextColours" Value="tl:FFFFF5F0 tr:FFFFF5F0 bl:FFFFF510 br:FFFFF5F0" />
+                <Property Name="Text" Value="Worst FPS: " />
+            </Window>
+
+            <Window Type="TaharezLook/StaticText" Name="OPBestFPS">
+                <Property Name="FrameEnabled" Value="False" />
+                <Property Name="BackgroundEnabled" Value="False" />
+                <Property Name="Font" Value="BlueHighway-10" />
+                <Property Name="UnifiedPosition" Value="{{0.075,0},{0.58,0}}" />
+                <Property Name="UnifiedSize" Value="{{1.0,0},{0.25,0}}" />
+                <Property Name="TextColours" Value="tl:FFFFF5F0 tr:FFFFF5F0 bl:FFFFF510 br:FFFFF5F0" />
+                <Property Name="Text" Value="Best FPS: " />
+            </Window>
+
+            <Window Type="TaharezLook/StaticText" Name="OPTriCount">
+                <Property Name="FrameEnabled" Value="False" />
+                <Property Name="BackgroundEnabled" Value="False" />
+                <Property Name="Font" Value="BlueHighway-10" />
+                <Property Name="UnifiedPosition" Value="{{0.075,0},{0.71,0}}" />
+                <Property Name="UnifiedSize" Value="{{1.0,0},{0.25,0}}" />
+                <Property Name="TextColours" Value="tl:FFFFF5F0 tr:FFFFF5F0 bl:FFFFF510 br:FFFFF5F0" />
+                <Property Name="Text" Value="Triangle Count: " />
+            </Window>
+
+            <Window Type="TaharezLook/StaticText" Name="OPBatchesCount">
+                <Property Name="FrameEnabled" Value="False" />
+                <Property Name="BackgroundEnabled" Value="False" />
+                <Property Name="Font" Value="BlueHighway-10" />
+                <Property Name="UnifiedPosition" Value="{{0.075,0},{0.71,0}}" />
+                <Property Name="UnifiedSize" Value="{{1.0,0},{0.25,0}}" />
+                <Property Name="TextColours" Value="tl:FFFFF5F0 tr:FFFFF5F0 bl:FFFFF510 br:FFFFF5F0" />
+                <Property Name="Text" Value="Triangle Count: " />
+            </Window>
+
+        </Window>
+
         <Window Type="TaharezLook/FrameWindow" Name="TextDemo" >
             <Property Name="Text" Value="Text sample" />
             <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
             <Property Name="TitlebarEnabled" Value="True" />
             <Property Name="UnifiedAreaRect" Value="{{0.0160194,0},{0.0159533,0},{0.869175,0},{0.880739,0}}" />
+
             <Window Type="TaharezLook/GroupBox" Name="TextDemo/StaticGroup" >
                 <Property Name="Text" Value="Static text" />
                 <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />

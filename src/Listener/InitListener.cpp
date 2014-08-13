@@ -9,7 +9,7 @@ void InitListener::init()
 	ListenerInputManager::createSingleton();
 	
 	//Create Frame Singleton
-    ListenerFrame::createSingleton(GestSceneManager::getRoot());
+  ListenerFrame::createSingleton(GestSceneManager::getRoot());
 	
 	//Create Keyboard Singleton
 	ListenerKeyboard::createSingleton();

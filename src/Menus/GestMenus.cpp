@@ -5,38 +5,38 @@ template<> GestMenus * ClassRootSingleton<GestMenus>::_instance = 0;
 
 GestMenus::GestMenus() : ClassRootSingleton<GestMenus>()
 {
-    this->rootWindow = 0;
+  this->rootWindow = 0;
     
    //démarre le menusRenderer
 	this->menusRenderer = &CEGUI::OgreRenderer::bootstrapSystem();
 
-    //prépare les différents groupes de ressources
-    CEGUI::Imageset::setDefaultResourceGroup("Imagesets");
-    CEGUI::Font::setDefaultResourceGroup("Fonts");
-    CEGUI::Scheme::setDefaultResourceGroup("Schemes");
-    CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
-    CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
+  //prépare les différents groupes de ressources
+  CEGUI::Imageset::setDefaultResourceGroup("Imagesets");
+  CEGUI::Font::setDefaultResourceGroup("Fonts");
+  CEGUI::Scheme::setDefaultResourceGroup("Schemes");
+  CEGUI::WidgetLookManager::setDefaultResourceGroup("LookNFeel");
+  CEGUI::WindowManager::setDefaultResourceGroup("Layouts");
 
-    //charge un scheme
-    CEGUI::SchemeManager::getSingleton().create("SleekSpace.scheme");
-    CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
+  //charge un scheme
+  CEGUI::SchemeManager::getSingleton().create("SleekSpace.scheme");
+  CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
 
-    //enregistre les signaux sur le clavier
-    ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.add(&GestMenus::keyStillPressed, this);
-    ListenerKeyboard::getSingletonPtr()->signalKeyPressed.add(&GestMenus::keyPressed, this);
-	ListenerKeyboard::getSingletonPtr()->signalKeyReleased.add(&GestMenus::keyReleased, this);
-	
-    //enregistre les signaux sur la souris
-    ListenerMouse::getSingletonPtr()->signalMouseMoved.add(&GestMenus::mouseMoved, this);
-    ListenerMouse::getSingletonPtr()->signalMousePressed.add(&GestMenus::mousePressed, this);
-    ListenerMouse::getSingletonPtr()->signalMouseReleased.add(&GestMenus::mouseReleased, this);
-    
-    PlayerControls::getSingletonPtr()->signalKeyPressed.add(&GestMenus::actionFromUser, this);
-    PlayerControls::getSingletonPtr()->signalKeyPressedInPause.add(&GestMenus::actionFromUser, this);
-    
-    this->rootWindowCreate();
-    this->mouseCreate(); 
-    this->mouseShow();    
+  //enregistre les signaux sur le clavier
+  ListenerKeyboard::getSingletonPtr()->signalKeyStillPressed.add(&GestMenus::keyStillPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyPressed.add(&GestMenus::keyPressed, this);
+  ListenerKeyboard::getSingletonPtr()->signalKeyReleased.add(&GestMenus::keyReleased, this);
+
+  //enregistre les signaux sur la souris
+  ListenerMouse::getSingletonPtr()->signalMouseMoved.add(&GestMenus::mouseMoved, this);
+  ListenerMouse::getSingletonPtr()->signalMousePressed.add(&GestMenus::mousePressed, this);
+  ListenerMouse::getSingletonPtr()->signalMouseReleased.add(&GestMenus::mouseReleased, this);
+  
+  PlayerControls::getSingletonPtr()->signalKeyPressed.add(&GestMenus::actionFromUser, this);
+  PlayerControls::getSingletonPtr()->signalKeyPressedInPause.add(&GestMenus::actionFromUser, this);
+  
+  this->rootWindowCreate();
+  this->mouseCreate(); 
+  this->mouseShow();    
 }
 
 GestMenus::~GestMenus()
@@ -49,9 +49,8 @@ GestMenus::~GestMenus()
 	ListenerMouse::getSingletonPtr()->signalMousePressed.remove(&GestMenus::mousePressed, this);
 	ListenerMouse::getSingletonPtr()->signalMouseReleased.remove(&GestMenus::mouseReleased, this);
     
-    
-    PlayerControls::getSingletonPtr()->signalKeyPressed.remove(&GestMenus::actionFromUser, this);
-    PlayerControls::getSingletonPtr()->signalKeyPressedInPause.remove(&GestMenus::actionFromUser, this);
+  PlayerControls::getSingletonPtr()->signalKeyPressed.remove(&GestMenus::actionFromUser, this);
+  PlayerControls::getSingletonPtr()->signalKeyPressedInPause.remove(&GestMenus::actionFromUser, this);
 
 	std::map<CEGUI::String, MenuAbstract *>::iterator it;
 	for(it = this->lstMenus.begin() ; it != this->lstMenus.end() ; it ++)
@@ -62,13 +61,19 @@ GestMenus::~GestMenus()
 
 	this->lstMenus.clear();
 
-    this->menusRenderer->destroyAllGeometryBuffers();
-    this->menusRenderer->destroyAllTextureTargets();
-    this->menusRenderer->destroyAllTextures();
+  this->menusRenderer->destroyAllGeometryBuffers();
+  this->menusRenderer->destroyAllTextureTargets();
+  this->menusRenderer->destroyAllTextures();
 
-    //~ CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-    //~ wmgr.destroyAllWindows(); // Executer à l'appel du return dans main.cpp (eh oui etrange xD)
-    //~ CEGUI::OgreRenderer::destroySystem(); // Executer à l'appel du return dans main.cpp (eh oui etrange xD)
+  CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
+  wmgr.destroyAllWindows(); // Executer à l'appel du return dans main.cpp (eh oui etrange xD)
+  CEGUI::OgreRenderer::destroySystem(); // Executer à l'appel du return dans main.cpp (eh oui etrange xD)
+}
+
+
+void GestMenus::loadWindowLayout(CEGUI::String layout)
+{
+  CEGUI::WindowManager::getSingleton().loadWindowLayout(layout); 
 }
 
 
@@ -132,7 +137,7 @@ void GestMenus::actionFromUser(Controls::Controls keyControls)
 void GestMenus::rootWindowCreate()
 {
     CEGUI::WindowManager &wmgr = CEGUI::WindowManager::getSingleton();
-    this->rootWindow = wmgr.createWindow ("DefaultWindow", "Briquette/root");
+    this->rootWindow = wmgr.createWindow ("DefaultWindow", "MainMenu/root");
 }
 
 void GestMenus::mouseCreate()

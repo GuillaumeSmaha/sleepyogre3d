@@ -9,8 +9,9 @@ int main(void)
 	
 	try
 	{
-	    Application::getSingletonPtr()->start();
+    Application::getSingletonPtr()->start();
 		Application::destroySingleton();
+		std::cerr << "AApplication::destroySingleton();" << std::endl;
 	}
 	catch( Ogre::Exception& e )
 	{

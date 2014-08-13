@@ -27,5 +27,7 @@ void InitSceneGraph::destroy()
 		GestSceneManager::getSceneManager()->destroySceneNode(NODE_NAME_GROUPE_CAMERA);
 		GestSceneManager::getSceneManager()->destroySceneNode(NODE_NAME_GROUPE_CAMERA_TARGET);
 		GestSceneManager::getSceneManager()->destroySceneNode(NODE_NAME_GROUPE_OBJECT);
+    
+    GestSceneManager::destroySingleton();
 	}
 }
