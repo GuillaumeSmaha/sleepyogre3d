@@ -30,5 +30,4 @@ ListenerInputManager::ListenerInputManager() : ClassRootSingleton<ListenerInputM
 
 ListenerInputManager::~ListenerInputManager()
 {
-  delete this->inputManager;
 }

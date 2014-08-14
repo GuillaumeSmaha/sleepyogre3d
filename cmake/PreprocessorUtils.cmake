@@ -7,6 +7,9 @@
 # free to make use of it in any way you like.
 #-------------------------------------------------------------------
 
+################################################################################
+# Get the value of a preprocessor entry
+################################################################################
 macro(get_preprocessor_entry CONTENTS KEYWORD VARIABLE)
   string(REGEX MATCH
     "# *define +${KEYWORD} +((\"([^\n]*)\")|([^ \n]*))"
@@ -20,6 +23,9 @@ macro(get_preprocessor_entry CONTENTS KEYWORD VARIABLE)
   endif ()
 endmacro()
 
+################################################################################
+# Check if exist a preprocessor entry
+################################################################################
 macro(has_preprocessor_entry CONTENTS KEYWORD VARIABLE)
   string(REGEX MATCH
     "\n *# *define +(${KEYWORD})"
@@ -33,6 +39,9 @@ macro(has_preprocessor_entry CONTENTS KEYWORD VARIABLE)
   endif ()
 endmacro()
 
+################################################################################
+# Replace the value of a preprocessor entry
+################################################################################
 macro(replace_preprocessor_entry VARIABLE KEYWORD NEW_VALUE)
   string(REGEX REPLACE 
     "(// *)?# *define +${KEYWORD} +[^ \n]*"
@@ -43,6 +52,9 @@ macro(replace_preprocessor_entry VARIABLE KEYWORD NEW_VALUE)
   set(${VARIABLE} ${${VARIABLE}_TEMP})  
 endmacro()
 
+################################################################################
+# Define the value of preprocessor entry
+################################################################################
 macro(set_preprocessor_entry VARIABLE KEYWORD ENABLE)
   if (${ENABLE})
     set(TMP_REPLACE_STR "#define ${KEYWORD}")

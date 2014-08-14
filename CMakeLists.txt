@@ -37,6 +37,7 @@ set(CMAKE_MODULE_PATH
 	"${CMAKE_MODULE_PATH}"
 )
 
+set(CEGUI_STATIC FALSE)
 include(Function)
 #Include des dépendances
 FIND_PACKAGE( OIS REQUIRED )
