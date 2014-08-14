@@ -29,7 +29,6 @@
 include(FindPkgMacros)
 include(PreprocessorUtils)
 findpkg_begin(CEGUI)
-set(CEGUI_FIND_REQUIRED 1)
 
 # Get path, convert backslashes as ${ENV_${var}}
 getenv_path(CEGUI_HOME)
@@ -87,33 +86,6 @@ create_search_paths(CEGUI)
 
 
 # redo search if any of the environmental hints changed
-set(CEGUI_WINDOWSRENDERER_COMPONENTS 
-	CoreWindowRendererSet Falagard
-)
-set(CEGUI_RENDERER_COMPONENTS 
-	Direct3D9Renderer Direct3D10Renderer Direct3D11Renderer IrrlichtRenderer NullRenderer OgreRenderer OpenGLRenderer OpenGL3Renderer
-)
-set(CEGUI_IMAGECODEC_COMPONENTS 
-	CoronaImageCodec DevILImageCodec FreeImageImageCodec SILLYImageCodec STBImageCodec TGAImageCodec
-)
-set(CEGUI_PARSER_COMPONENTS 
-	ExpatParser LibxmlParser RapidXMLParser TinyXMLParser XercesParser
-)
-set(CEGUI_SCRIPT_COMPONENTS 
-	LuaScriptModule
-)
-set(CEGUI_COMPONENTS ${CEGUI_WINDOWSRENDERER_COMPONENTS} ${CEGUI_RENDERER_COMPONENTS} ${CEGUI_IMAGECODEC_COMPONENTS} ${CEGUI_PARSER_COMPONENTS} ${CEGUI_SCRIPT_COMPONENTS})
-
-set(CEGUI_RESET_VARS 
-  CEGUI_CONFIG_INCLUDE_DIR CEGUI_INCLUDE_DIR 
-  CEGUI_LIBRARY_REL CEGUI_LIBRARY_DBG)
-
-foreach (comp ${CEGUI_COMPONENTS})
-  set(CEGUI_RESET_VARS ${CEGUI_RESET_VARS}
-    CEGUI_${comp}_INCLUDE_DIR CEGUI_${comp}_LIBRARY_FWK
-    CEGUI_${comp}_LIBRARY_DBG CEGUI_${comp}_LIBRARY_REL
-  )
-endforeach (comp)
 set(CEGUI_PREFIX_WATCH ${CEGUI_PREFIX_PATH})
 clear_if_changed(CEGUI_PREFIX_WATCH ${CEGUI_RESET_VARS})
 
@@ -124,41 +96,42 @@ use_pkgconfig(CEGUI_PKGC "CEGUI${CEGUI_LIB_SUFFIX}")
 #find_path(CEGUI_CONFIG_INCLUDE_DIR_OLD NAMES CEGUI/Config.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
 #find_path(CEGUI_CONFIG_INCLUDE_DIR NAMES CEGUI/Config.h CEGUI/CEGUIConfig.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
 #find_path(CEGUI_INCLUDE_DIR NAMES CEGUI/CEGUI.h  HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
-find_path(CEGUI_CONFIG_INCLUDE_DIR_OLD NAMES Config.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
-find_path(CEGUI_CONFIG_INCLUDE_DIR NAMES Config.h CEGUIConfig.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
-find_path(CEGUI_INCLUDE_DIR NAMES CEGUI.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui)
+find_path(CEGUI_CONFIG_INCLUDE_DIR_OLD NAMES Config.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui cegui-0)
+find_path(CEGUI_CONFIG_INCLUDE_DIR NAMES Config.h CEGUIConfig.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui cegui-0)
+find_path(CEGUI_INCLUDE_DIR NAMES CEGUI.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui cegui-0)
+
+
+message(send_error "CEGUI_INCLUDE_DIR=${CEGUI_INCLUDE_DIR}")
 set(CEGUI_INCOMPATIBLE FALSE)
-
-
 if (CEGUI_INCLUDE_DIR)
   # determine CEGUI version
-  IF(CEGUI_CONFIG_INCLUDE_DIR_OLD)
+  if(CEGUI_CONFIG_INCLUDE_DIR_OLD)
     file(READ ${CEGUI_INCLUDE_DIR}/Version.h CEGUI_TEMP_VERSION_CONTENT)
-  ELSE()
+  else()
     file(READ ${CEGUI_INCLUDE_DIR}/CEGUIVersion.h CEGUI_TEMP_VERSION_CONTENT)
-  ENDIF()
+  endif()
   
-  IF (NOT "${CEGUI_TEMP_VERSION_CONTENT}" STREQUAL "")
+  if (NOT "${CEGUI_TEMP_VERSION_CONTENT}" STREQUAL "")
     get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_MAJOR CEGUI_VERSION_MAJOR)
     get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_MINOR CEGUI_VERSION_MINOR)
     get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_PATCH CEGUI_VERSION_PATCH)
     get_preprocessor_entry(CEGUI_TEMP_VERSION_CONTENT CEGUI_VERSION_NAME CEGUI_VERSION_NAME)
     set(CEGUI_VERSION "${CEGUI_VERSION_MAJOR}.${CEGUI_VERSION_MINOR}.${CEGUI_VERSION_PATCH}")
     pkg_message(CEGUI "Found CEGUI ${CEGUI_VERSION_NAME} (${CEGUI_VERSION})")
-  ELSE()
-    MESSAGE(SEND_ERROR "Can't found CEGUI version !")
-  ENDIF()
+  else()
+    message(SEND_ERROR "Can't found CEGUI version !")
+  endif()
   
   # determine configuration settings
-  IF(CEGUI_CONFIG_INCLUDE_DIR_OLD)
+  if(CEGUI_CONFIG_INCLUDE_DIR_OLD)
     set(CEGUI_CONFIG_HEADERS
       ${CEGUI_CONFIG_INCLUDE_DIR}/Config.h
     )
-  ELSE()
+  else()
     set(CEGUI_CONFIG_HEADERS
       ${CEGUI_CONFIG_INCLUDE_DIR}/CEGUIConfig.h
     )
-  ENDIF()
+  endif()
   foreach(CFG_FILE ${CEGUI_CONFIG_HEADERS})
     if (EXISTS ${CFG_FILE})
       set(CEGUI_CONFIG_HEADER ${CFG_FILE})
@@ -182,10 +155,15 @@ find_library(CEGUI_LIBRARY_DBG NAMES ${CEGUI_LIBRARY_NAMES_DBG} HINTS ${CEGUI_LI
 make_library_set(CEGUI_LIBRARY)
 
 
+if (NOT "${CEGUI_VERSION_MAJOR}" STREQUAL "0")
+  pkg_message(CEGUI "Can only manage major version 0.")
+  set(CEGUI_INCOMPATIBLE FALSE)
+endif ()
+
+
 if (CEGUI_INCOMPATIBLE)
   set(CEGUI_LIBRARY "NOTFOUND")
 endif ()
-
 
 set(CEGUI_INCLUDE_DIR ${CEGUI_CONFIG_INCLUDE_DIR} ${CEGUI_INCLUDE_DIR})
 list(REMOVE_DUPLICATES CEGUI_INCLUDE_DIR)
@@ -220,66 +198,122 @@ if (NOT CEGUI_STATIC)
 endif()
 
 
-# look for Falagard component
-findpkg_begin(CEGUI_Falagard)
-find_path(CEGUI_Falagard_INCLUDE_DIR NAMES CEGUIFalNamedArea.h HINTS ${CEGUI_INCLUDE_DIRS} PATH_SUFFIXES falagard CEGUI/falagard)
-set(CEGUI_Falagard_INCLUDE_DIR_TMP ${CEGUI_Falagard_INCLUDE_DIR})
-find_path(CEGUI_Falagard_INCLUDE_DIR NAMES FalModule.h HINTS ${CEGUI_INCLUDE_DIRS} PATH_SUFFIXES WindowRendererSets/Falagard CEGUI/WindowRendererSets/Falagard)
-set(CEGUI_Falagard_INCLUDE_DIR ${CEGUI_Falagard_INCLUDE_DIR} ${CEGUI_Falagard_INCLUDE_DIR_TMP})
-set(CEGUI_Falagard_LIBRARY_NAMES "CEGUIFalagardWRBase${CEGUI_LIB_SUFFIX}")
-get_debug_names(CEGUI_Falagard_LIBRARY_NAMES)
-find_library(CEGUI_Falagard_LIBRARY_REL NAMES ${CEGUI_Falagard_LIBRARY_NAMES} HINTS ${CEGUI_LIBRARY_DIR_REL} PATH_SUFFIXES "" "release" "relwithdebinfo" "minsizerel")
-find_library(CEGUI_Falagard_LIBRARY_DBG NAMES ${CEGUI_Falagard_LIBRARY_NAMES_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} PATH_SUFFIXES "" "debug")
-make_library_set(CEGUI_Falagard_LIBRARY)
-findpkg_finish(CEGUI_Falagard)
 
 
-foreach (comp ${CEGUI_RENDERER_COMPONENTS})
-	findpkg_begin(CEGUI_${comp})
-	string(REPLACE "Renderer" "" compName ${comp})
-	find_path(CEGUI_${comp}_INCLUDE_DIR NAMES CEGUI${comp}.h HINTS ${CEGUI_INCLUDE_DIRS} PATH_SUFFIXES RendererModules/${compName} CEGUI/RendererModules/${compName})
-	set(CEGUI_${comp}_LIBRARY_NAMES "CEGUI${comp}${CEGUI_LIB_SUFFIX}")
-	get_debug_names(CEGUI_${comp}_LIBRARY_NAMES)
-	find_library(CEGUI_${comp}_LIBRARY_REL NAMES ${CEGUI_${comp}_LIBRARY_NAMES} HINTS ${CEGUI_LIBRARY_DIR_REL} PATH_SUFFIXES "" "release" "relwithdebinfo" "minsizerel")
-	find_library(CEGUI_${comp}_LIBRARY_DBG NAMES ${CEGUI_${comp}_LIBRARY_NAMES_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} PATH_SUFFIXES "" "debug")
-	make_library_set(CEGUI_${comp}_LIBRARY)
-	findpkg_finish(CEGUI_${comp})
+
+
+
+#########################################################
+# Find cegui plugins
+#########################################################        
+macro ( cegui_find_plugin PLUGIN_COMPONENT DIRECTORY COMPONENT_HEADER)
+
+  foreach (comp ${CEGUI_${PLUGIN_COMPONENT}_COMPONENTS})
+  
+    set(DIRECTORY ${DIRECTORY})
+    
+    set(COMP_HEADER_NAME "${comp}")
+    set(COMP_DIRECTORY_NAME "${comp}")
+    
+    string(REPLACE "ScriptModule" "" COMP_HEADER_NAME ${COMP_HEADER_NAME})
+    string(REPLACE "WRBase" "" COMP_DIRECTORY_NAME_TMP ${COMP_DIRECTORY_NAME})
+    string(REPLACE "Renderer" "" COMP_DIRECTORY_NAME ${COMP_DIRECTORY_NAME_TMP})
+    
+    set(CHEADER ${COMPONENT_HEADER})
+    if ("${COMPONENT_HEADER}" STREQUAL "")
+        set(CHEADER ${COMP_HEADER_NAME}.h CEGUI${COMP_HEADER_NAME}.h)
+    endif()
+    
+    if (NOT "${CHEADER}" STREQUAL "")
+    
+      findpkg_begin(CEGUI_${comp})
+      
+      list(LENGTH DIRECTORY len1)
+      list(LENGTH CHEADER len2)
+      math(EXPR lenmax "${len1} - 1")
+
+      foreach(val RANGE ${lenmax})
+        list(GET DIRECTORY ${val} dir)
+        list(GET CHEADER ${val} head)
+        
+        if(NOT "${len1}" STREQUAL "${len2}")
+          set(head ${CHEADER})
+        endif()
+        
+        if(CEGUI_${comp}_INCLUDE_DIR)
+          set(CEGUI_${comp}_INCLUDE_DIR_TMP ${CEGUI_${comp}_INCLUDE_DIR})
+          unset(CEGUI_${comp}_INCLUDE_DIR CACHE)
+        endif()
+        
+        find_path(CEGUI_${comp}_INCLUDE_DIR NAMES ${head} HINTS ${CEGUI_INCLUDE_DIRS} PATH_SUFFIXES ${dir} CEGUI/${dir} ${dir}/${COMP_DIRECTORY_NAME} CEGUI/${dir}/${COMP_DIRECTORY_NAME})
+
+        if(CEGUI_${comp}_INCLUDE_DIR_TMP)
+          set(CEGUI_${comp}_INCLUDE_DIR ${CEGUI_${comp}_INCLUDE_DIR} ${CEGUI_${comp}_INCLUDE_DIR_TMP})
+          unset(CEGUI_${comp}_INCLUDE_DIR_TMP CACHE)
+        endif()
+        
+      endforeach()
+      
+      
+      set(CEGUI_${comp}_LIBRARY_NAMES "CEGUI${comp}${CEGUI_LIB_SUFFIX}")
+      get_debug_names(CEGUI_${comp}_LIBRARY_NAMES)
+      find_library(CEGUI_${comp}_LIBRARY_REL NAMES ${CEGUI_${comp}_LIBRARY_NAMES} HINTS ${CEGUI_LIBRARY_DIR_REL} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
+      find_library(CEGUI_${comp}_LIBRARY_DBG NAMES ${CEGUI_${comp}_LIBRARY_NAMES_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} PATH_SUFFIXES "" "Debug")
+      make_library_set(CEGUI_${comp}_LIBRARY)
+      findpkg_finish(CEGUI_${comp})
+      
+    endif ()
+    
+  endforeach (comp)
+  
+endmacro(cegui_find_plugin)
+
+
+
+
+set(CEGUI_WINDOWSRENDERER_FALAGARD_COMPONENTS 
+	FalagardWRBase
+)
+set(CEGUI_RENDERER_COMPONENTS 
+	Direct3D9Renderer Direct3D10Renderer Direct3D11Renderer IrrlichtRenderer NullRenderer OgreRenderer OpenGLRenderer OpenGL3Renderer
+)
+set(CEGUI_IMAGECODEC_COMPONENTS 
+	CoronaImageCodec DevILImageCodec FreeImageImageCodec SILLYImageCodec STBImageCodec TGAImageCodec
+)
+set(CEGUI_PARSER_COMPONENTS 
+	ExpatParser LibxmlParser RapidXMLParser TinyXMLParser XercesParser
+)
+set(CEGUI_SCRIPT_COMPONENTS 
+	LuaScriptModule
+)
+set(CEGUI_SCRIPT_LUA_COMPONENTS 
+	toluapp
+)
+
+
+if ("${CEGUI_VERSION_MINOR}" STREQUAL "7")
+
+elseif ("${CEGUI_VERSION_MINOR}" STREQUAL "8")
+
+endif ()
+
+set(CEGUI_COMPONENTS ${CEGUI_WINDOWSRENDERER_COMPONENTS} ${CEGUI_RENDERER_COMPONENTS} ${CEGUI_IMAGECODEC_COMPONENTS} ${CEGUI_PARSER_COMPONENTS} ${CEGUI_SCRIPT_COMPONENTS})
+set(CEGUI_RESET_VARS CEGUI_CONFIG_INCLUDE_DIR CEGUI_INCLUDE_DIR CEGUI_LIBRARY_REL CEGUI_LIBRARY_DBG)
+
+foreach (comp ${CEGUI_COMPONENTS})
+  set(CEGUI_RESET_VARS ${CEGUI_RESET_VARS}
+    CEGUI_${comp}_INCLUDE_DIR CEGUI_${comp}_LIBRARY_FWK
+    CEGUI_${comp}_LIBRARY_DBG CEGUI_${comp}_LIBRARY_REL
+  )
 endforeach (comp)
 
-foreach (comp ${CEGUI_IMAGECODEC_COMPONENTS})
-	findpkg_begin(CEGUI_${comp})
-	find_path(CEGUI_${comp}_INCLUDE_DIR NAMES CEGUI${comp}.h HINTS ${CEGUI_INCLUDE_DIRS} PATH_SUFFIXES ImageCodecModules/${comp} CEGUI/ImageCodecModules/${comp})
-	set(CEGUI_${comp}_LIBRARY_NAMES "CEGUI${comp}${CEGUI_LIB_SUFFIX}")
-	get_debug_names(CEGUI_${comp}_LIBRARY_NAMES)
-	find_library(CEGUI_${comp}_LIBRARY_REL NAMES ${CEGUI_${comp}_LIBRARY_NAMES} HINTS ${CEGUI_LIBRARY_DIR_REL} PATH_SUFFIXES "" "release" "relwithdebinfo" "minsizerel")
-	find_library(CEGUI_${comp}_LIBRARY_DBG NAMES ${CEGUI_${comp}_LIBRARY_NAMES_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} PATH_SUFFIXES "" "debug")
-	make_library_set(CEGUI_${comp}_LIBRARY)
-	findpkg_finish(CEGUI_${comp})
-endforeach (comp)
 
-foreach (comp ${CEGUI_PARSER_COMPONENTS})
-	findpkg_begin(CEGUI_${comp})
-	find_path(CEGUI_${comp}_INCLUDE_DIR NAMES CEGUI${comp}.h HINTS ${CEGUI_INCLUDE_DIRS} PATH_SUFFIXES XMLParserModules/${comp} CEGUI/XMLParserModules/${comp})
-	set(CEGUI_${comp}_LIBRARY_NAMES "CEGUI${comp}${CEGUI_LIB_SUFFIX}")
-	get_debug_names(CEGUI_${comp}_LIBRARY_NAMES)
-	find_library(CEGUI_${comp}_LIBRARY_REL NAMES ${CEGUI_${comp}_LIBRARY_NAMES} HINTS ${CEGUI_LIBRARY_DIR_REL} PATH_SUFFIXES "" "release" "relwithdebinfo" "minsizerel")
-	find_library(CEGUI_${comp}_LIBRARY_DBG NAMES ${CEGUI_${comp}_LIBRARY_NAMES_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} PATH_SUFFIXES "" "debug")
-	make_library_set(CEGUI_${comp}_LIBRARY)
-	findpkg_finish(CEGUI_${comp})
-endforeach (comp)
-
-foreach (comp ${CEGUI_SCRIPT_COMPONENTS})
-	findpkg_begin(CEGUI_${comp})
-	string(REPLACE "ScriptModule" "" compName ${comp})
-	find_path(CEGUI_${comp}_INCLUDE_DIR NAMES CEGUI${compName}.h HINTS ${CEGUI_INCLUDE_DIRS} PATH_SUFFIXES ScriptingModules/${comp} CEGUI/ScriptingModules/${comp})
-	set(CEGUI_${comp}_LIBRARY_NAMES "CEGUI${comp}${CEGUI_LIB_SUFFIX}")
-	get_debug_names(CEGUI_${comp}_LIBRARY_NAMES)
-	find_library(CEGUI_${comp}_LIBRARY_REL NAMES ${CEGUI_${comp}_LIBRARY_NAMES} HINTS ${CEGUI_LIBRARY_DIR_REL} PATH_SUFFIXES "" "release" "relwithdebinfo" "minsizerel")
-	find_library(CEGUI_${comp}_LIBRARY_DBG NAMES ${CEGUI_${comp}_LIBRARY_NAMES_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} PATH_SUFFIXES "" "debug")
-	make_library_set(CEGUI_${comp}_LIBRARY)
-	findpkg_finish(CEGUI_${comp})
-endforeach (comp)
-
+cegui_find_plugin(WINDOWSRENDERER_FALAGARD "WindowRendererSets;falagard" "FalModule.h;CEGUIFalNamedArea.h")
+cegui_find_plugin(RENDERER RendererModules "")
+cegui_find_plugin(IMAGECODEC ImageCodecModules "")
+cegui_find_plugin(PARSER XMLParserModules "")
+cegui_find_plugin(SCRIPT ScriptingModules "")
+cegui_find_plugin(SCRIPT_LUA ScriptingModules/LuaScriptModule/support/tolua++ "tolua++.h")
 
 
 clear_if_changed(CEGUI_PREFIX_WATCH)
