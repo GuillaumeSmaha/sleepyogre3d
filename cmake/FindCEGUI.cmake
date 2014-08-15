@@ -1,4 +1,8 @@
-# - Locate CEGUI LIBRARIES
+################################################################################
+# FindCEGUI
+# 
+# Locate CEGUI LIBRARIES
+#
 # This module defines
 #  CEGUI_FOUND, if false, do not try to link to CEGUI
 #  CEGUI_INCLUDE_DIR, where to find headers.
@@ -37,6 +41,7 @@
 #		ExpatParser LibXMLParser RapidXMLParser TinyXMLParser XercesParser)
 #	Script:
 #		LuaScriptModule
+################################################################################
 
 
 ################################################################################
