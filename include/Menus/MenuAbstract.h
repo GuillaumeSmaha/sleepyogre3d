@@ -11,7 +11,7 @@ This source file is part of SleepyOgre3D
 #define __MENU_ABSTRACT_H__
 
 #ifndef DOXYGEN_SKIP
-#include <CEGUI.h>
+#include <CEGUI/CEGUI.h>
 #include <RendererModules/Ogre/CEGUIOgreRenderer.h>
 #endif
 

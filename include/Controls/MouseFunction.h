@@ -12,8 +12,8 @@ This source file is part of SleepyOgre3D
 
 #ifndef DOXYGEN_SKIP
 #include <Ogre.h>
-#include <CEGUI.h>
-#include <OIS.h>
+#include <CEGUI/CEGUI.h>
+#include <OIS/OIS.h>
 #endif
 
 #include "Core/ClassRootSingleton.h"

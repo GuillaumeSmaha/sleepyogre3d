@@ -178,7 +178,7 @@ endmacro(clear_if_changed)
 macro(use_pkgconfig PREFIX PKGNAME)
   find_package(PkgConfig)
   if (PKG_CONFIG_FOUND)
-    pkg_check_modules(${PREFIX} ${PKGNAME})
+    pkg_check_modules(${PREFIX} ${PKGNAME} QUIET)
   endif ()
 endmacro (use_pkgconfig)
 
@@ -237,7 +237,7 @@ macro(findpkg_finish PREFIX)
       endif ()
     endif ()
 
-    mark_as_advanced(${PREFIX}_INCLUDE_DIR ${PREFIX}_LIBRARY ${PREFIX}_LIBRARY_REL ${PREFIX}_LIBRARY_DBG ${PREFIX}_LIBRARY_FWK)
+    mark_as_advanced(${PREFIX}_FOUND ${PREFIX}_LIBRARIES ${PREFIX}_INCLUDE_DIRS ${PREFIX}_INCLUDE_DIR ${PREFIX}_LIBRARY ${PREFIX}_LIBRARY_REL ${PREFIX}_LIBRARY_DBG ${PREFIX}_LIBRARY_FWK)
   endif ()
 endmacro(findpkg_finish)
 
@@ -251,11 +251,19 @@ macro(cegui_find_modules PLUGIN_COMPONENT)
   
     set(LIBNAME ${comp})
     set(HEADER ${CEGUI_${PLUGIN_COMPONENT}_MODULES_${comp}_HEADER})
+    set(PKGCONFIG ${CEGUI_${PLUGIN_COMPONENT}_MODULES_${comp}_PKGCONFIG})
     set(CHECKNOPREFIX ${CEGUI_${PLUGIN_COMPONENT}_MODULES_${comp}_CHECKNOPREFIX})
     
     if (NOT "${HEADER}" STREQUAL "")
     
       findpkg_begin(CEGUI_${comp})
+      
+      if(PKGCONFIG)
+        use_pkgconfig(CEGUI_${comp}_PKGC "CEGUI-${PKGCONFIG}")
+        if(NOT CEGUI_${comp}_PKGC_INCLUDE_DIRS AND CEGUI_LIB_SUFFIX)
+          use_pkgconfig(CEGUI_${comp}_PKGC "CEGUI${CEGUI_LIB_SUFFIX}-${PKGCONFIG}")
+        endif()
+      endif()
       
       list(LENGTH HEADER len)
       math(EXPR lenmax "${len} - 1")
@@ -274,7 +282,7 @@ macro(cegui_find_modules PLUGIN_COMPONENT)
           set(dir "${dir}/")
         endif ()
         
-        find_path(CEGUI_${comp}_INCLUDE_DIR NAMES ${head} HINTS ${CEGUI_INCLUDE_DIRS} PATH_SUFFIXES ${dir} CEGUI/${dir})
+        find_path(CEGUI_${comp}_INCLUDE_DIR NAMES ${head} HINTS ${CEGUI_INCLUDE_DIRS} ${CEGUI_${comp}_PKGC_INCLUDE_DIRS} PATH_SUFFIXES ${dir} CEGUI/${dir})
 
         if(CEGUI_${comp}_INCLUDE_DIR_TMP)
           set(CEGUI_${comp}_INCLUDE_DIR ${CEGUI_${comp}_INCLUDE_DIR} ${CEGUI_${comp}_INCLUDE_DIR_TMP})
@@ -293,39 +301,38 @@ macro(cegui_find_modules PLUGIN_COMPONENT)
       set(CEGUI_${comp}_LIBRARY_NAMES_SUFFIX "CEGUI${comp}${CEGUI_LIB_SUFFIX}")
       get_debug_names(CEGUI_${comp}_LIBRARY_NAMES_SUFFIX)
       
-      find_library(CEGUI_${comp}_LIBRARY_REL NAMES ${CEGUI_${comp}_LIBRARY_NAMES} ${CEGUI_${comp}_LIBRARY_NAMES_SUFFIX} HINTS ${CEGUI_LIBRARY_DIR_REL} ${CEGUI_LIBRARY_DIR_REL}/${CEGUI_SUBLIB_DIR} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
-      find_library(CEGUI_${comp}_LIBRARY_DBG NAMES ${CEGUI_${comp}_LIBRARY_NAMES_DBG} ${CEGUI_${comp}_LIBRARY_NAMES_SUFFIX_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} ${CEGUI_LIBRARY_DIR_DBG}/${CEGUI_SUBLIB_DIR} PATH_SUFFIXES "" "Debug")
+      find_library(CEGUI_${comp}_LIBRARY_REL NAMES ${CEGUI_${comp}_LIBRARY_NAMES} ${CEGUI_${comp}_LIBRARY_NAMES_SUFFIX} HINTS ${CEGUI_LIBRARY_DIR_REL} ${CEGUI_LIBRARY_DIR_REL}/${CEGUI_SUBLIB_DIR} ${CEGUI_${comp}_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
+      find_library(CEGUI_${comp}_LIBRARY_DBG NAMES ${CEGUI_${comp}_LIBRARY_NAMES_DBG} ${CEGUI_${comp}_LIBRARY_NAMES_SUFFIX_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} ${CEGUI_LIBRARY_DIR_DBG}/${CEGUI_SUBLIB_DIR} ${CEGUI_${comp}_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" "Debug")
 	  
-	  if(CHECKNOPREFIX AND (NOT CEGUI_${comp}_LIBRARY_REL OR NOT CEGUI_${comp}_LIBRARY_DBG))
-		  
-		  set(CEGUI_${comp}_LIBRARY_NAMES "${comp}")
-		  get_debug_names(CEGUI_${comp}_LIBRARY_NAMES)
-		  
-		  set(CEGUI_${comp}_LIBRARY_NAMES_SUFFIX "${comp}${CEGUI_LIB_SUFFIX}")
-		  get_debug_names(CEGUI_${comp}_LIBRARY_NAMES_SUFFIX)
-		  
-		  find_library(CEGUI_${comp}_LIBRARY_REL NAMES ${CEGUI_${comp}_LIBRARY_NAMES} ${CEGUI_${comp}_LIBRARY_NAMES_SUFFIX} HINTS ${CEGUI_LIBRARY_DIR_REL} ${CEGUI_LIBRARY_DIR_REL}/${CEGUI_SUBLIB_DIR} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
-		  find_library(CEGUI_${comp}_LIBRARY_DBG NAMES ${CEGUI_${comp}_LIBRARY_NAMES_DBG} ${CEGUI_${comp}_LIBRARY_NAMES_SUFFIX_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} ${CEGUI_LIBRARY_DIR_DBG}/${CEGUI_SUBLIB_DIR} PATH_SUFFIXES "" "Debug")
-	  endif()
-	  
-      make_library_set(CEGUI_${comp}_LIBRARY)
+      if(CHECKNOPREFIX AND (NOT CEGUI_${comp}_LIBRARY_REL OR NOT CEGUI_${comp}_LIBRARY_DBG))
+        set(CEGUI_${comp}_LIBRARY_NAMES "${comp}")
+        get_debug_names(CEGUI_${comp}_LIBRARY_NAMES)
+        
+        set(CEGUI_${comp}_LIBRARY_NAMES_SUFFIX "${comp}${CEGUI_LIB_SUFFIX}")
+        get_debug_names(CEGUI_${comp}_LIBRARY_NAMES_SUFFIX)
+        
+        find_library(CEGUI_${comp}_LIBRARY_REL NAMES ${CEGUI_${comp}_LIBRARY_NAMES} ${CEGUI_${comp}_LIBRARY_NAMES_SUFFIX} HINTS ${CEGUI_LIBRARY_DIR_REL} ${CEGUI_LIBRARY_DIR_REL}/${CEGUI_SUBLIB_DIR} ${CEGUI_${comp}_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
+        find_library(CEGUI_${comp}_LIBRARY_DBG NAMES ${CEGUI_${comp}_LIBRARY_NAMES_DBG} ${CEGUI_${comp}_LIBRARY_NAMES_SUFFIX_DBG} HINTS ${CEGUI_LIBRARY_DIR_DBG} ${CEGUI_LIBRARY_DIR_DBG}/${CEGUI_SUBLIB_DIR} ${CEGUI_${comp}_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" "Debug")
+      endif()
       
-	  if (NOT CEGUI_STATIC)
-		if (WIN32)
-		  find_file(CEGUI_${comp}_BINARY_REL NAMES "CEGUI${comp}.dll" "CEGUI${comp}${CEGUI_LIB_SUFFIX}.dll" HINTS ${CEGUI_BIN_SEARCH_PATH} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
-		  find_file(CEGUI_${comp}_BINARY_DBG NAMES "CEGUI${comp}_d.dll" "CEGUI${comp}${CEGUI_LIB_SUFFIX}_d.dll" HINTS ${CEGUI_BIN_SEARCH_PATH} PATH_SUFFIXES "" "Debug")
-		  
-	     if(CHECKNOPREFIX AND (NOT CEGUI_${comp}_LIBRARY_REL OR NOT CEGUI_${comp}_LIBRARY_DBG))
-		   find_file(CEGUI_${comp}_BINARY_REL NAMES "${comp}${CEGUI_LIB_SUFFIX}.dll" HINTS ${CEGUI_BIN_SEARCH_PATH} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
-		   find_file(CEGUI_${comp}_BINARY_DBG NAMES "${comp}${CEGUI_LIB_SUFFIX}_d.dll" HINTS ${CEGUI_BIN_SEARCH_PATH} PATH_SUFFIXES "" "Debug")
-		  endif()
-		endif()
-		
-		get_filename_component(CEGUI_${comp}_BINARY_DIR_REL "${CEGUI_${comp}_BINARY_REL}" PATH)
-		get_filename_component(CEGUI_${comp}_BINARY_DIR_DBG "${CEGUI_${comp}_BINARY_DBG}" PATH)
-		mark_as_advanced(CEGUI_${comp}_BINARY_REL CEGUI_${comp}_BINARY_DBG CEGUI_${comp}_BINARY_DIR_REL CEGUI_${comp}_BINARY_DIR_DBG)
-	  endif()
-	  
+      make_library_set(CEGUI_${comp}_LIBRARY)
+        
+      if (NOT CEGUI_STATIC)
+        if (WIN32)
+          find_file(CEGUI_${comp}_BINARY_REL NAMES "CEGUI${comp}.dll" "CEGUI${comp}${CEGUI_LIB_SUFFIX}.dll" HINTS ${CEGUI_BIN_SEARCH_PATH} ${CEGUI_${comp}_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
+          find_file(CEGUI_${comp}_BINARY_DBG NAMES "CEGUI${comp}_d.dll" "CEGUI${comp}${CEGUI_LIB_SUFFIX}_d.dll" HINTS ${CEGUI_BIN_SEARCH_PATH} ${CEGUI_${comp}_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" "Debug")
+          
+           if(CHECKNOPREFIX AND (NOT CEGUI_${comp}_LIBRARY_REL OR NOT CEGUI_${comp}_LIBRARY_DBG))
+             find_file(CEGUI_${comp}_BINARY_REL NAMES "${comp}${CEGUI_LIB_SUFFIX}.dll" HINTS ${CEGUI_BIN_SEARCH_PATH} PATH_SUFFIXES "" "Release" "RelWithDebInfo" "MinSizeRel")
+             find_file(CEGUI_${comp}_BINARY_DBG NAMES "${comp}${CEGUI_LIB_SUFFIX}_d.dll" HINTS ${CEGUI_BIN_SEARCH_PATH} PATH_SUFFIXES "" "Debug")
+          endif()
+        endif()
+        
+        get_filename_component(CEGUI_${comp}_BINARY_DIR_REL "${CEGUI_${comp}_BINARY_REL}" PATH)
+        get_filename_component(CEGUI_${comp}_BINARY_DIR_DBG "${CEGUI_${comp}_BINARY_DBG}" PATH)
+        mark_as_advanced(CEGUI_${comp}_BINARY_REL CEGUI_${comp}_BINARY_DBG CEGUI_${comp}_BINARY_DIR_REL CEGUI_${comp}_BINARY_DIR_DBG)
+      endif()
+      
       findpkg_finish(CEGUI_${comp})
       
     endif ()
@@ -338,10 +345,13 @@ endmacro(cegui_find_modules)
 #########################################################
 # register a module
 #########################################################        
-macro(cegui_register_module TYPE LIBNAME HEADER)
+macro(cegui_register_module TYPE LIBNAME HEADER PKGCONFIG)
     set(CEGUI_MODULES ${CEGUI_MODULES} ${LIBNAME})
     set(CEGUI_${TYPE}_MODULES ${CEGUI_${TYPE}_MODULES} ${LIBNAME})
     set(CEGUI_${TYPE}_MODULES_${LIBNAME}_HEADER ${HEADER})
+    if(NOT "${PKGCONFIG}" STREQUAL "")
+      set(CEGUI_${TYPE}_MODULES_${LIBNAME}_PKGCONFIG ${PKGCONFIG})
+    endif()
 endmacro()
 
 
@@ -351,6 +361,9 @@ endmacro()
 #########################################################
 # Main
 #########################################################
+
+
+set(CEGUI_VERSION_MAJOR_DEFAULT "0")
 
 
 #Register var to check change on base
@@ -417,16 +430,12 @@ create_search_paths(CEGUI)
 
 
 # try to locate CEGUI via pkg-config
-use_pkgconfig(CEGUI_PKGC "CEGUI${CEGUI_LIB_SUFFIX}")
-if(NOT CEGUI_PKGC_INCLUDE_DIRS)
-  use_pkgconfig(CEGUI_PKGC "CEGUI${CEGUI_LIB_SUFFIX}-0")
-endif()
+use_pkgconfig(CEGUI_PKGC "CEGUI${CEGUI_LIB_SUFFIX};CEGUI${CEGUI_LIB_SUFFIX}-${CEGUI_VERSION_MAJOR_DEFAULT}")
 
 # locate CEGUI include files
-
-find_path(CEGUI_CONFIG_INCLUDE_DIR_PREFIX NAMES CEGUIConfig.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui cegui-0 cegui-0/CEGUI)
-find_path(CEGUI_CONFIG_INCLUDE_DIR NAMES CEGUIConfig.h Config.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui cegui-0 cegui-0/CEGUI)
-find_path(CEGUI_INCLUDE_DIR NAMES CEGUI.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui cegui-0 cegui-0/CEGUI)
+find_path(CEGUI_CONFIG_INCLUDE_DIR_PREFIX NAMES CEGUIConfig.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui cegui-${CEGUI_VERSION_MAJOR_DEFAULT} cegui-${CEGUI_VERSION_MAJOR_DEFAULT}/CEGUI)
+find_path(CEGUI_CONFIG_INCLUDE_DIR NAMES CEGUIConfig.h Config.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui cegui-${CEGUI_VERSION_MAJOR_DEFAULT} cegui-${CEGUI_VERSION_MAJOR_DEFAULT}/CEGUI)
+find_path(CEGUI_INCLUDE_DIR NAMES CEGUI.h HINTS ${CEGUI_INC_SEARCH_PATH} ${CEGUI_FRAMEWORK_INCLUDES} ${CEGUI_PKGC_INCLUDE_DIRS} PATH_SUFFIXES CEGUI cegui cegui-${CEGUI_VERSION_MAJOR_DEFAULT} cegui-${CEGUI_VERSION_MAJOR_DEFAULT}/CEGUI)
 
 set(CEGUI_INCOMPATIBLE FALSE)
 if (CEGUI_INCLUDE_DIR)
@@ -474,6 +483,7 @@ set(CEGUI_INCLUDE_DIR ${CEGUI_CONFIG_INCLUDE_DIR} ${CEGUI_INCLUDE_DIR})
 list(REMOVE_DUPLICATES CEGUI_INCLUDE_DIR)
 findpkg_finish(CEGUI)
 add_parent_dir(CEGUI_INCLUDE_DIRS CEGUI_INCLUDE_DIR)
+set(CEGUI_INCLUDE_DIR ${CEGUI_INCLUDE_DIRS})
 
 mark_as_advanced(CEGUI_CONFIG_INCLUDE_DIR)
 
@@ -482,23 +492,11 @@ if (NOT CEGUI_FOUND)
 endif ()
 
 
-
 get_filename_component(CEGUI_LIBRARY_DIR_REL "${CEGUI_LIBRARY_REL}" PATH)
 get_filename_component(CEGUI_LIBRARY_DIR_DBG "${CEGUI_LIBRARY_DBG}" PATH)
 set(CEGUI_LIBRARY_DIRS ${CEGUI_LIBRARY_DIR_REL} ${CEGUI_LIBRARY_DIR_DBG})
 
-############################
-############################
-############################
-############################
-############################
-############################A CHECKER
-############################
-############################
-############################
-############################
-############################
-############################
+
 # find binaries 
 if (NOT CEGUI_STATIC)
 	if (WIN32)
@@ -513,81 +511,81 @@ endif()
 
 if ("${CEGUI_VERSION}" VERSION_GREATER "0.8.0")
   #Base
-  cegui_register_module(BASE CommonDialogs CommonDialogs/Module.h)
+  cegui_register_module(BASE CommonDialogs CommonDialogs/Module.h "")
   
   #WindowsRenderer
-  cegui_register_module(WINDOWSRENDERER CoreWindowRendererSet WindowRendererSets/Core/Module.h)
+  cegui_register_module(WINDOWSRENDERER CoreWindowRendererSet WindowRendererSets/Core/Module.h "")
   
   #Renderer
-  cegui_register_module(RENDERER Direct3D9Renderer RendererModules/Direct3D9/Renderer.h)
-  cegui_register_module(RENDERER Direct3D10Renderer RendererModules/Direct3D10/Renderer.h)
-  cegui_register_module(RENDERER Direct3D11Renderer RendererModules/Direct3D11/Renderer.h)
-  cegui_register_module(RENDERER DirectFBRenderer RendererModules/DirectFB/Renderer.h)
-  cegui_register_module(RENDERER IrrlichtRenderer RendererModules/Irrlicht/Renderer.h)
-  cegui_register_module(RENDERER NullRenderer RendererModules/Null/Renderer.h)
-  cegui_register_module(RENDERER OgreRenderer RendererModules/Ogre/Renderer.h)
-  cegui_register_module(RENDERER OpenGLRenderer RendererModules/OpenGL/GLRenderer.h)
-  cegui_register_module(RENDERER OpenGL3Renderer RendererModules/OpenGL/GL3Renderer.h)
-  cegui_register_module(RENDERER OpenGLESRenderer RendererModules/OpenGLES/Renderer.h)
+  cegui_register_module(RENDERER Direct3D9Renderer RendererModules/Direct3D9/Renderer.h "")
+  cegui_register_module(RENDERER Direct3D10Renderer RendererModules/Direct3D10/Renderer.h "")
+  cegui_register_module(RENDERER Direct3D11Renderer RendererModules/Direct3D11/Renderer.h "")
+  cegui_register_module(RENDERER DirectFBRenderer RendererModules/DirectFB/Renderer.h "")
+  cegui_register_module(RENDERER IrrlichtRenderer RendererModules/Irrlicht/Renderer.h "IRRLICHT")
+  cegui_register_module(RENDERER NullRenderer RendererModules/Null/Renderer.h "NULL")
+  cegui_register_module(RENDERER OgreRenderer RendererModules/Ogre/Renderer.h "OGRE")
+  cegui_register_module(RENDERER OpenGLRenderer RendererModules/OpenGL/GLRenderer.h "OPENGL")
+  cegui_register_module(RENDERER OpenGL3Renderer RendererModules/OpenGL/GL3Renderer.h "OPENGL3")
+  cegui_register_module(RENDERER OpenGLESRenderer RendererModules/OpenGLES/Renderer.h "")
   
   #ImageCodec
-  cegui_register_module(IMAGECODEC CoronaImageCodec ImageCodecModules/Corona/ImageCodec.h)
-  cegui_register_module(IMAGECODEC DevILImageCodec ImageCodecModules/DevIL/ImageCodec.h)
-  cegui_register_module(IMAGECODEC FreeImageImageCodec ImageCodecModules/FreeImage/ImageCodec.h)
-  cegui_register_module(IMAGECODEC SILLYImageCodec ImageCodecModules/SILLY/ImageCodec.h)
-  cegui_register_module(IMAGECODEC STBImageCodec ImageCodecModules/STB/ImageCodec.h)
-  cegui_register_module(IMAGECODEC TGAImageCodec ImageCodecModules/TGA/ImageCodec.h)
-  cegui_register_module(IMAGECODEC PVRImageCodec ImageCodecModules/PVR/ImageCodec.h)
+  cegui_register_module(IMAGECODEC CoronaImageCodec ImageCodecModules/Corona/ImageCodec.h "")
+  cegui_register_module(IMAGECODEC DevILImageCodec ImageCodecModules/DevIL/ImageCodec.h "")
+  cegui_register_module(IMAGECODEC FreeImageImageCodec ImageCodecModules/FreeImage/ImageCodec.h "")
+  cegui_register_module(IMAGECODEC SILLYImageCodec ImageCodecModules/SILLY/ImageCodec.h "")
+  cegui_register_module(IMAGECODEC STBImageCodec ImageCodecModules/STB/ImageCodec.h "")
+  cegui_register_module(IMAGECODEC TGAImageCodec ImageCodecModules/TGA/ImageCodec.h "")
+  cegui_register_module(IMAGECODEC PVRImageCodec ImageCodecModules/PVR/ImageCodec.h "")
   
   #Parser
-  cegui_register_module(PARSER ExpatParser XMLParserModules/Expat/XMLParser.h)
-  cegui_register_module(PARSER LibXMLParser XMLParserModules/Libxml2/XMLParser.h)
-  cegui_register_module(PARSER RapidXMLParser XMLParserModules/RapidXML/XMLParser.h)
-  cegui_register_module(PARSER TinyXMLParser XMLParserModules/TinyXML/XMLParser.h)
-  cegui_register_module(PARSER XercesParser XMLParserModules/Xerces/XMLParser.h)
+  cegui_register_module(PARSER ExpatParser XMLParserModules/Expat/XMLParser.h "")
+  cegui_register_module(PARSER LibXMLParser XMLParserModules/Libxml2/XMLParser.h "")
+  cegui_register_module(PARSER RapidXMLParser XMLParserModules/RapidXML/XMLParser.h "")
+  cegui_register_module(PARSER TinyXMLParser XMLParserModules/TinyXML/XMLParser.h "")
+  cegui_register_module(PARSER XercesParser XMLParserModules/Xerces/XMLParser.h "")
   
   #Script
-  cegui_register_module(SCRIPT LuaScriptModule ScriptModules/Lua/ScriptModule.h)
+  cegui_register_module(SCRIPT LuaScriptModule ScriptModules/Lua/ScriptModule.h "LUA")
   
 else ()
   
   #WindowsRenderer
-  cegui_register_module(WINDOWSRENDERER FalagardWRBase "WindowRendererSets/Falagard/FalModule.h;falagard/CEGUIFalNamedArea.h")
+  cegui_register_module(WINDOWSRENDERER FalagardWRBase "WindowRendererSets/Falagard/FalModule.h;falagard/CEGUIFalNamedArea.h" "")
   
   #Renderer
-  cegui_register_module(RENDERER Direct3D9Renderer RendererModules/Direct3D9/CEGUIDirect3D9Renderer.h)
-  cegui_register_module(RENDERER Direct3D10Renderer RendererModules/Direct3D10/CEGUIDirect3D10Renderer.h)
-  cegui_register_module(RENDERER Direct3D11Renderer RendererModules/Direct3D11/CEGUIDirect3D11Renderer.h)
-  cegui_register_module(RENDERER DirectFBRenderer RendererModules/DirectFB/CEGUIDirectFBRenderer.h)
-  cegui_register_module(RENDERER IrrlichtRenderer RendererModules/Irrlicht/CEGUIIrrlichtRenderer.h)
-  cegui_register_module(RENDERER NullRenderer RendererModules/Null/CEGUINullRenderer.h)
-  cegui_register_module(RENDERER OgreRenderer RendererModules/Ogre/CEGUIOgreRenderer.h)
-  cegui_register_module(RENDERER OpenGLRenderer RendererModules/OpenGL/CEGUIOpenGLRenderer.h)
+  cegui_register_module(RENDERER Direct3D9Renderer RendererModules/Direct3D9/CEGUIDirect3D9Renderer.h "")
+  cegui_register_module(RENDERER Direct3D10Renderer RendererModules/Direct3D10/CEGUIDirect3D10Renderer.h "")
+  cegui_register_module(RENDERER Direct3D11Renderer RendererModules/Direct3D11/CEGUIDirect3D11Renderer.h "")
+  cegui_register_module(RENDERER DirectFBRenderer RendererModules/DirectFB/CEGUIDirectFBRenderer.h "")
+  cegui_register_module(RENDERER IrrlichtRenderer RendererModules/Irrlicht/CEGUIIrrlichtRenderer.h "")
+  cegui_register_module(RENDERER NullRenderer RendererModules/Null/CEGUINullRenderer.h "NULL")
+  cegui_register_module(RENDERER OgreRenderer RendererModules/Ogre/CEGUIOgreRenderer.h "OGRE")
+  cegui_register_module(RENDERER OpenGLRenderer RendererModules/OpenGL/CEGUIOpenGLRenderer.h "OPENGL")
   
   #ImageCodec
-  cegui_register_module(IMAGECODEC CoronaImageCodec ImageCodecModules/CoronaImageCodec/CEGUICoronaImageCodec.h)
-  cegui_register_module(IMAGECODEC DevILImageCodec ImageCodecModules/DevILImageCodec/CEGUIDevILImageCodec.h)
-  cegui_register_module(IMAGECODEC FreeImageImageCodec ImageCodecModules/FreeImageImageCodec/CEGUIFreeImageImageCodec.h)
-  cegui_register_module(IMAGECODEC SILLYImageCodec ImageCodecModules/SILLYImageCodec/CEGUISILLYImageCodec.h)
-  cegui_register_module(IMAGECODEC STBImageCodec ImageCodecModules/STBImageCodec/CEGUISTBImageCodec.h)
-  cegui_register_module(IMAGECODEC TGAImageCodec ImageCodecModules/TGAImageCodec/CEGUITGAImageCodec.h)
+  cegui_register_module(IMAGECODEC CoronaImageCodec ImageCodecModules/CoronaImageCodec/CEGUICoronaImageCodec.h "")
+  cegui_register_module(IMAGECODEC DevILImageCodec ImageCodecModules/DevILImageCodec/CEGUIDevILImageCodec.h "")
+  cegui_register_module(IMAGECODEC FreeImageImageCodec ImageCodecModules/FreeImageImageCodec/CEGUIFreeImageImageCodec.h "")
+  cegui_register_module(IMAGECODEC SILLYImageCodec ImageCodecModules/SILLYImageCodec/CEGUISILLYImageCodec.h "")
+  cegui_register_module(IMAGECODEC STBImageCodec ImageCodecModules/STBImageCodec/CEGUISTBImageCodec.h "")
+  cegui_register_module(IMAGECODEC TGAImageCodec ImageCodecModules/TGAImageCodec/CEGUITGAImageCodec.h "")
   
   #Parser
-  cegui_register_module(PARSER ExpatParser XMLParserModules/ExpatParser/CEGUIExpatParser.h)
-  cegui_register_module(PARSER LibxmlParser XMLParserModules/LibxmlParser/CEGUILibxmlParser.h)
-  cegui_register_module(PARSER RapidXMLParser XMLParserModules/RapidXMLParser/CEGUIRapidXMLParser.h)
-  cegui_register_module(PARSER TinyXMLParser XMLParserModules/TinyXMLParser/CEGUITinyXMLParser.h)
-  cegui_register_module(PARSER XercesParser XMLParserModules/XercesParser/CEGUIXercesParser.h)
+  cegui_register_module(PARSER ExpatParser XMLParserModules/ExpatParser/CEGUIExpatParser.h "")
+  cegui_register_module(PARSER LibxmlParser XMLParserModules/LibxmlParser/CEGUILibxmlParser.h "")
+  cegui_register_module(PARSER RapidXMLParser XMLParserModules/RapidXMLParser/CEGUIRapidXMLParser.h "")
+  cegui_register_module(PARSER TinyXMLParser XMLParserModules/TinyXMLParser/CEGUITinyXMLParser.h "")
+  cegui_register_module(PARSER XercesParser XMLParserModules/XercesParser/CEGUIXercesParser.h "")
   
   #Script
-  cegui_register_module(SCRIPT LuaScriptModule ScriptingModules/LuaScriptModule/CEGUILua.h)
+  cegui_register_module(SCRIPT LuaScriptModule ScriptingModules/LuaScriptModule/CEGUILua.h "")
   
   if(WIN32)
-	cegui_register_module(SCRIPT tolua++ ScriptingModules/LuaScriptModule/support/tolua++/tolua++.h)
-	set(CEGUI_SCRIPT_MODULES_tolua++_CHECKNOPREFIX TRUE)
+    cegui_register_module(SCRIPT tolua++ ScriptingModules/LuaScriptModule/support/tolua++/tolua++.h "")
+    set(CEGUI_SCRIPT_MODULES_tolua++_CHECKNOPREFIX TRUE)
   else()
-	cegui_register_module(SCRIPT toluapp ScriptingModules/LuaScriptModule/support/tolua++/tolua++.h)
-endif()
+    cegui_register_module(SCRIPT toluapp ScriptingModules/LuaScriptModule/support/tolua++/tolua++.h "")
+  endif()
 
 endif ()
 
@@ -623,4 +621,3 @@ endif()
 #Check change on modules
 clear_if_changed(CEGUI_PREFIX_WATCH)
 clear_if_changed(CEGUI_PREFIX_MODULES_WATCH)
-
