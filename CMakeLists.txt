@@ -40,13 +40,13 @@ set(CMAKE_MODULE_PATH
 set(CEGUI_STATIC FALSE)
 include(Function)
 #Include des dépendances
-FIND_PACKAGE( OIS REQUIRED )
-FIND_PACKAGE( OGRE REQUIRED )
+#FIND_PACKAGE( OIS REQUIRED )
+#FIND_PACKAGE( OGRE REQUIRED )
 FIND_PACKAGE( CEGUI REQUIRED )
 
  
-IF (NOT "${OGRE_VERSION_NAME}" STREQUAL "Ghadamon")
-	MESSAGE(SEND_ERROR "You need Ogre 1.9 Ghadamon to build this.")
+IF (NOT "${OGRE_VERSION_NAME}" STREQUAL "Cthugha" AND NOT "${OGRE_VERSION_NAME}" STREQUAL "Byatis" AND NOT "${OGRE_VERSION_NAME}" STREQUAL "Ghadamon")
+	MESSAGE(SEND_ERROR "You need Ogre 1.7 Cthugha, Ogre 1.8 Byatis Or Ogre 1.9 Ghadamon to build this.")
 ENDIF()
 
 IF(NOT CEGUI_OgreRenderer_FOUND)

@@ -13,11 +13,11 @@ This source file is part of SleepyOgre3D
 
 #ifndef DOXYGEN_SKIP
 #include <Ogre.h>
-#include <CEGUI/CEGUIPropertyHelper.h>
-#include <CEGUI/CEGUIWindowManager.h>
-#include <CEGUI/CEGUIWindow.h>
-#include <CEGUI/CEGUIRenderer.h>
-#include <OIS/OIS.h>
+#include <CEGUIPropertyHelper.h>
+#include <CEGUIWindowManager.h>
+#include <CEGUIWindow.h>
+#include <CEGUIRenderer.h>
+#include <OIS.h>
 #endif
 
 #include "Core/Signal.h"

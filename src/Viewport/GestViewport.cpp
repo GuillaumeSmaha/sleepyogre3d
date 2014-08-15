@@ -1,14 +1,16 @@
 #include "Viewport/GestViewport.h"
 
+
 template<> GestViewport * ClassRootSingleton<GestViewport>::_instance = 0;
 
 
 std::vector<ViewportPosDim_t> GestViewport::getViewportPosDim(int nbViewport)
 {
+
 	std::vector<ViewportPosDim_t> result;
 	int iViewport;
 	int numberColumn;
-	int numberLine = (int)round(sqrt(nbViewport));
+	int numberLine = (int)(floor(sqrt(1.0 * nbViewport)) + 0.5);
 	int numberColumnMax = (int)ceil(nbViewport*1.0/numberLine);
 	
 	iViewport = 0;
@@ -24,20 +26,20 @@ std::vector<ViewportPosDim_t> GestViewport::getViewportPosDim(int nbViewport)
 			
 			if((i+1) != numberLine)
 			{
-				viewport.height = Utils::floorValue((1.0/numberLine), 4) + (1.0/pow(10, 2));
+				viewport.height = Utils::floorValue((1.0/numberLine), 4) + (1.0/pow(10.0, 2));
 			}
 			else
 			{
-				viewport.height = Utils::floorValue((1.0/numberLine), 4) + (1.0/pow(10, 2));
+				viewport.height = Utils::floorValue((1.0/numberLine), 4) + (1.0/pow(10.0, 2));
 			}
 			
 			if((j+1) != numberColumn)
 			{
-				viewport.width = Utils::floorValue((1.0/numberColumn), 4) + (1.0/pow(10, 2));
+				viewport.width = Utils::floorValue((1.0/numberColumn), 4) + (1.0/pow(10.0, 2));
 			}
 			else
 			{
-				viewport.width = Utils::floorValue((1.0/numberColumn), 4) + (1.0/pow(10, 2));
+				viewport.width = Utils::floorValue((1.0/numberColumn), 4) + (1.0/pow(10.0, 2));
 			}
 			
 			result.push_back(viewport);

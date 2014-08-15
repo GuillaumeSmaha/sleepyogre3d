@@ -22,26 +22,26 @@ int Utils::randRangeInt(int min, int max)
 
 float Utils::floorValue(float value, unsigned int places)
 {
-	float off = pow(10, places);
+	float off = pow(10.0, static_cast<int>(places));
 	return floor(value * off) / off;
 }
 
 double Utils::floorValue(double value, unsigned int places)
 {
-	double off = pow(10, places);
+	double off = pow(10.0, static_cast<int>(places));
 	return floor(value * off) / off;
 }
 
 float Utils::roundValue(float value, unsigned int places)
 {
-	float off = pow(10, places);
-	return round(value * off) / off;
+	float off = pow(10.0, static_cast<int>(places));
+	return ((int)(floor(value * off) + 0.5)) / off;
 }
 
 double Utils::roundValue(double value, unsigned int places)
 {
-	double off = pow(10, places);
-	return round(value * off) / off;
+	double off = pow(10.0, static_cast<int>(places));
+	return ((int)((value * off) + 0.5)) / off;
 }
 
 
