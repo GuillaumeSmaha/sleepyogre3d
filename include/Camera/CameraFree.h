@@ -1,8 +1,3 @@
-/*
------------------------------------------------------------------------------
-This source file is part of SleepyOgre3D
------------------------------------------------------------------------------
-*/
 /*!
  * \file  CameraFree.h
  * \brief Ce fichier contient la déclaration de la classe CameraFree. C'est la classe gérant une caméra fixe.

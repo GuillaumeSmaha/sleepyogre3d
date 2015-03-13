@@ -1,8 +1,3 @@
-/*
------------------------------------------------------------------------------
-This source file is part of SleepyOgre3D
------------------------------------------------------------------------------
-*/
 /*!
  * \file InitSceneGraph.h
  * \brief This file contains the declaration of the class InitSceneGraph.

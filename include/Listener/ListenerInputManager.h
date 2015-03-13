@@ -1,8 +1,3 @@
-/*
------------------------------------------------------------------------------
-This source file is part of SleepyOgre3D
------------------------------------------------------------------------------
-*/
 /*!
  * \file  ListenerInputManager.h
  * \brief Ce fichier contient la déclaration de la classe ListenerInputManager. C'est la classe gérant les événements du clavier.

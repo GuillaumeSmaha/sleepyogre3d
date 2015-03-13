@@ -1,8 +1,3 @@
-/*
------------------------------------------------------------------------------
-This source file is part of SleepyOgre3D
------------------------------------------------------------------------------
-*/
 /*!
  * \file  MenuAbstract.h
  * \brief Ce fichier contient la déclaration de la classe MenuAbstract. Elle utilise cegui pour offrir des fenetre standard. Utiliser par le Menus et Annonce

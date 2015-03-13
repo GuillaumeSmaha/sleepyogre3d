@@ -1,8 +1,3 @@
-/*
------------------------------------------------------------------------------
-This source file is part of SleepyOgre3D
------------------------------------------------------------------------------
-*/
 /*!
  * \file  CameraAbstract.h
  * \brief Ce fichier contient la déclaration de la classe CameraAbstract. C'est la classe une classe abstraite qui permet d'utiliser différents types de caméras fixes.

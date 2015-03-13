@@ -1,8 +1,3 @@
-/*
------------------------------------------------------------------------------
-This source file is part of SleepyOgre3D
------------------------------------------------------------------------------
-*/
 /*!
  * \file  GestMenus.h
  * \brief Ce fichier contient la déclaration de la classe GestMenus. C'est la classe gérant les événements de la fenêtre.

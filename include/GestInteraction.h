@@ -1,8 +1,3 @@
-/*
------------------------------------------------------------------------------
-This source file is part of SleepyOgre3D
------------------------------------------------------------------------------
-*/
 /*!
  * \file  GestInteraction.h
  * \brief Ce fichier contient la déclaration de la classe GestInteraction. C'est la classe gérant les informations de la partie

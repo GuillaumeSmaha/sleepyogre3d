@@ -1,8 +1,3 @@
-/*
------------------------------------------------------------------------------
-This source file is part of SleepyOgre3D
------------------------------------------------------------------------------
-*/
 /*!
  * \file  ClassRootSingleton.h
  * \brief Ce fichier contient la déclaration de la classe ClassRootSingleton. 
